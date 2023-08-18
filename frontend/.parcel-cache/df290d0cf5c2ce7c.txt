@@ -1,16 +1,19 @@
-14651
+14660
+65/home/pasan/vote/block-vote/frontend/dist/logo-black.4514ed42.svg1691564986448872489 0
 59/home/pasan/vote/block-vote/frontend/dist/index.04ab1e5b.js1691564873248876463 0
 63/home/pasan/vote/block-vote/frontend/dist/index.04ab1e5b.js.map1691564873278876465 0
 63/home/pasan/vote/block-vote/frontend/dist/fetch.ba39af06.js.map1691564873428876475 0
 59/home/pasan/vote/block-vote/frontend/dist/fetch.165263dc.js1691564873248876463 0
 63/home/pasan/vote/block-vote/frontend/dist/index.0209d837.js.map1691564873268876464 0
 59/home/pasan/vote/block-vote/frontend/dist/fetch.ba39af06.js1691564873248876463 0
+62/home/pasan/vote/block-vote/frontend/dist/favicon.eee7a1e8.ico1691564986398872203 0
 63/home/pasan/vote/block-vote/frontend/dist/index.eabacc48.js.map1691564873428876475 0
 59/home/pasan/vote/block-vote/frontend/dist/index.eabacc48.js1691564873248876463 0
 64/home/pasan/vote/block-vote/frontend/dist/index.8f81d6b3.css.map1691564873288876465 0
 60/home/pasan/vote/block-vote/frontend/dist/index.8f81d6b3.css1691564873248876463 0
-52/home/pasan/vote/block-vote/frontend/dist/index.html1691564873248876463 0
-41/home/pasan/vote/block-vote/frontend/dist1691564873428876475 1
+59/home/pasan/vote/block-vote/frontend/dist/index.3d214d75.js1691564986498872774 0
+52/home/pasan/vote/block-vote/frontend/dist/index.html1691564986448872489 0
+41/home/pasan/vote/block-vote/frontend/dist1691564986518872888 1
 54/home/pasan/vote/block-vote/frontend/assets/global.css1691564205958868619 0
 55/home/pasan/vote/block-vote/frontend/assets/favicon.ico1691564205958868619 0
 58/home/pasan/vote/block-vote/frontend/assets/logo-black.svg1691564205958868619 0
@@ -4214,6 +4217,7 @@
 107/home/pasan/vote/block-vote/frontend/node_modules/csso/node_modules/css-tree/lib/definition-syntax/parse.js1691564347318885819 0
 112/home/pasan/vote/block-vote/frontend/node_modules/css-select/node_modules/entities/lib/esm/decode_codepoint.d.ts1691564346408885736 0
 63/home/pasan/vote/block-vote/frontend/node_modules/xtend/test.js1691564330978884368 0
+65/home/pasan/vote/block-vote/frontend/dist/logo-white.a7716062.svg1691564986448872489 0
 75/home/pasan/vote/block-vote/frontend/node_modules/svgo/plugins/sortAttrs.js1691564332348884491 0
 96/home/pasan/vote/block-vote/frontend/node_modules/readable-stream/lib/internal/streams/stream.js1691564331478884413 0
 92/home/pasan/vote/block-vote/frontend/node_modules/rxjs/dist/esm/internal/util/applyMixins.js1691564346558885750 0
@@ -5149,6 +5153,7 @@
 102/home/pasan/vote/block-vote/frontend/node_modules/react-shallow-renderer/esm/react-shallow-renderer.js1691564331438884409 0
 101/home/pasan/vote/block-vote/frontend/node_modules/@babel/types/lib/converters/toSequenceExpression.js1691564346728885765 0
 86/home/pasan/vote/block-vote/frontend/node_modules/ts-node/dist-raw/node-primordials.js1691564346168885714 0
+64/home/pasan/vote/block-vote/frontend/dist/index.bc0daea6.css.map1691564986488872717 0
 69/home/pasan/vote/block-vote/frontend/node_modules/browserslist/cli.js1691564344918885600 0
 85/home/pasan/vote/block-vote/frontend/node_modules/caniuse-lite/data/features/touch.js1691564348028885884 0
 79/home/pasan/vote/block-vote/frontend/node_modules/@babel/core/lib/gensync-utils1691564346588885753 1
@@ -7222,6 +7227,7 @@
 111/home/pasan/vote/block-vote/frontend/node_modules/regenerate-unicode-properties/Binary_Property/Bidi_Control.js1691564331808884442 0
 73/home/pasan/vote/block-vote/frontend/node_modules/@types/node/events.d.ts1691564331858884447 0
 85/home/pasan/vote/block-vote/frontend/node_modules/uri-js/dist/esnext/schemes/https.js1691564334498884685 0
+59/home/pasan/vote/block-vote/frontend/dist/fetch.5aa4d3e3.js1691564986498872774 0
 100/home/pasan/vote/block-vote/frontend/node_modules/@parcel/utils/test/input/sourcemap/no-sourcemap.js1691564333428884588 0
 101/home/pasan/vote/block-vote/frontend/node_modules/rxjs/dist/esm5/internal/operators/switchScan.js.map1691564349248885996 0
 86/home/pasan/vote/block-vote/frontend/node_modules/capability/lib/CapabilityDetector.js1691564330968884367 0
@@ -8473,6 +8479,7 @@
 88/home/pasan/vote/block-vote/frontend/node_modules/ajv/lib/vocabularies/jtd/properties.ts1691564334978884727 0
 102/home/pasan/vote/block-vote/frontend/node_modules/@parcel/runtime-js/src/helpers/worker/wasm-loader.js1691564332388884495 0
 97/home/pasan/vote/block-vote/frontend/node_modules/@babel/helper-validator-option/lib/validator.js1691564345268885632 0
+60/home/pasan/vote/block-vote/frontend/dist/index.bc0daea6.css1691564986488872717 0
 89/home/pasan/vote/block-vote/frontend/node_modules/@babel/plugin-transform-modules-amd/lib1691564344958885604 1
 101/home/pasan/vote/block-vote/frontend/node_modules/@babel/runtime/helpers/possibleConstructorReturn.js1691564332958884546 0
 68/home/pasan/vote/block-vote/frontend/node_modules/xtend/immutable.js1691564330748884347 0
@@ -10275,6 +10282,7 @@
 85/home/pasan/vote/block-vote/frontend/node_modules/cross-spawn/lib/util/readShebang.js1691564323918883696 0
 98/home/pasan/vote/block-vote/frontend/node_modules/@swc/helpers/_/_non_iterable_spread/package.json1691564333988884639 0
 91/home/pasan/vote/block-vote/frontend/node_modules/rxjs/dist/cjs/internal/operators/first.js1691564347408885828 0
+63/home/pasan/vote/block-vote/frontend/dist/fetch.5aa4d3e3.js.map1691564986508872831 0
 82/home/pasan/vote/block-vote/frontend/node_modules/@swc/helpers/scripts/ast_grep.js1691564333318884578 0
 71/home/pasan/vote/block-vote/frontend/node_modules/cross-spawn/README.md1691564330678884341 0
 82/home/pasan/vote/block-vote/frontend/node_modules/create-require/create-require.js1691564323838883688 0
@@ -10283,6 +10291,7 @@
 100/home/pasan/vote/block-vote/frontend/node_modules/@babel/plugin-transform-unicode-sets-regex/LICENSE1691564344678885578 0
 77/home/pasan/vote/block-vote/frontend/node_modules/.bin/ts-node-transpile-only1691564358618886869 0
 84/home/pasan/vote/block-vote/frontend/node_modules/create-require/create-require.d.ts1691564330628884336 0
+63/home/pasan/vote/block-vote/frontend/dist/index.3d214d75.js.map1691564986508872831 0
 90/home/pasan/vote/block-vote/frontend/node_modules/@near-wallet-selector/modal-ui/README.md1691564345928885692 0
 91/home/pasan/vote/block-vote/frontend/node_modules/nodemon/node_modules/debug/src/browser.js1691564344938885602 0
 86/home/pasan/vote/block-vote/frontend/node_modules/@babel/types/lib/definitions/core.js1691564346778885770 0

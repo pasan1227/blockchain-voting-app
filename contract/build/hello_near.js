@@ -33,6 +33,41 @@ var TypeBrand;
   TypeBrand["BIGINT"] = "bigint";
   TypeBrand["DATE"] = "date";
 })(TypeBrand || (TypeBrand = {}));
+const ERR_INCONSISTENT_STATE = "The collection is an inconsistent state. Did previous smart contract execution terminate unexpectedly?";
+const ERR_INDEX_OUT_OF_BOUNDS = "Index out of bounds";
+/**
+ * Asserts that the expression passed to the function is truthy, otherwise throws a new Error with the provided message.
+ *
+ * @param expression - The expression to be asserted.
+ * @param message - The error message to be printed.
+ */
+function assert(expression, message) {
+  if (!expression) {
+    throw new Error("assertion failed: " + message);
+  }
+}
+function getValueWithOptions(value, options = {
+  deserializer: deserialize
+}) {
+  if (value === null) {
+    return options?.defaultValue ?? null;
+  }
+  const deserialized = deserialize(value);
+  if (deserialized === undefined || deserialized === null) {
+    return options?.defaultValue ?? null;
+  }
+  if (options?.reconstructor) {
+    return options.reconstructor(deserialized);
+  }
+  return deserialized;
+}
+function serializeValueWithOptions(value, {
+  serializer
+} = {
+  serializer: serialize
+}) {
+  return serializer(value);
+}
 function serialize(valueToSerialize) {
   return encode(JSON.stringify(valueToSerialize, function (key, value) {
     if (typeof value === "bigint") {
@@ -491,6 +526,40 @@ function storageReadRaw(key) {
   return env.read_register(0);
 }
 /**
+ * Reads the utf-8 string value from NEAR storage that is stored under the provided key.
+ *
+ * @param key - The utf-8 string key to read from storage.
+ */
+function storageRead(key) {
+  const ret = storageReadRaw(encode(key));
+  if (ret !== null) {
+    return decode(ret);
+  }
+  return null;
+}
+/**
+ * Checks for the existance of a value under the provided key in NEAR storage.
+ *
+ * @param key - The key to check for in storage.
+ */
+function storageHasKeyRaw(key) {
+  return env.storage_has_key(key) === 1n;
+}
+/**
+ * Checks for the existance of a value under the provided utf-8 string key in NEAR storage.
+ *
+ * @param key - The utf-8 string key to check for in storage.
+ */
+function storageHasKey(key) {
+  return storageHasKeyRaw(encode(key));
+}
+/**
+ * Get the last written or removed value from NEAR storage.
+ */
+function storageGetEvictedRaw() {
+  return env.read_register(EVICTED_REGISTER);
+}
+/**
  * Writes the provided bytes to NEAR storage under the provided key.
  *
  * @param key - The key under which to store the value.
@@ -498,6 +567,22 @@ function storageReadRaw(key) {
  */
 function storageWriteRaw(key, value) {
   return env.storage_write(key, value, EVICTED_REGISTER) === 1n;
+}
+/**
+ * Removes the value of the provided key from NEAR storage.
+ *
+ * @param key - The key to be removed.
+ */
+function storageRemoveRaw(key) {
+  return env.storage_remove(key, EVICTED_REGISTER) === 1n;
+}
+/**
+ * Removes the value of the provided utf-8 string key from NEAR storage.
+ *
+ * @param key - The utf-8 string key to be removed.
+ */
+function storageRemove(key) {
+  return storageRemoveRaw(encode(key));
 }
 /**
  * Returns the arguments passed to the current smart contract call.
@@ -511,6 +596,665 @@ function inputRaw() {
  */
 function input() {
   return decode(inputRaw());
+}
+
+/**
+ * A lookup map that stores data in NEAR storage.
+ */
+class LookupMap {
+  /**
+   * @param keyPrefix - The byte prefix to use when storing elements inside this collection.
+   */
+  constructor(keyPrefix) {
+    this.keyPrefix = keyPrefix;
+  }
+  /**
+   * Checks whether the collection contains the value.
+   *
+   * @param key - The value for which to check the presence.
+   */
+  containsKey(key) {
+    const storageKey = this.keyPrefix + key;
+    return storageHasKey(storageKey);
+  }
+  /**
+   * Get the data stored at the provided key.
+   *
+   * @param key - The key at which to look for the data.
+   * @param options - Options for retrieving the data.
+   */
+  get(key, options) {
+    const storageKey = this.keyPrefix + key;
+    const value = storageReadRaw(encode(storageKey));
+    return getValueWithOptions(value, options);
+  }
+  /**
+   * Removes and retrieves the element with the provided key.
+   *
+   * @param key - The key at which to remove data.
+   * @param options - Options for retrieving the data.
+   */
+  remove(key, options) {
+    const storageKey = this.keyPrefix + key;
+    if (!storageRemove(storageKey)) {
+      return options?.defaultValue ?? null;
+    }
+    const value = storageGetEvictedRaw();
+    return getValueWithOptions(value, options);
+  }
+  /**
+   * Store a new value at the provided key.
+   *
+   * @param key - The key at which to store in the collection.
+   * @param newValue - The value to store in the collection.
+   * @param options - Options for retrieving and storing the data.
+   */
+  set(key, newValue, options) {
+    const storageKey = this.keyPrefix + key;
+    const storageValue = serializeValueWithOptions(newValue, options);
+    if (!storageWriteRaw(encode(storageKey), storageValue)) {
+      return options?.defaultValue ?? null;
+    }
+    const value = storageGetEvictedRaw();
+    return getValueWithOptions(value, options);
+  }
+  /**
+   * Extends the current collection with the passed in array of key-value pairs.
+   *
+   * @param keyValuePairs - The key-value pairs to extend the collection with.
+   * @param options - Options for storing the data.
+   */
+  extend(keyValuePairs, options) {
+    for (const [key, value] of keyValuePairs) {
+      this.set(key, value, options);
+    }
+  }
+  /**
+   * Serialize the collection.
+   *
+   * @param options - Options for storing the data.
+   */
+  serialize(options) {
+    return serializeValueWithOptions(this, options);
+  }
+  /**
+   * Converts the deserialized data from storage to a JavaScript instance of the collection.
+   *
+   * @param data - The deserialized data to create an instance from.
+   */
+  static reconstruct(data) {
+    return new LookupMap(data.keyPrefix);
+  }
+}
+
+function indexToKey(prefix, index) {
+  const data = new Uint32Array([index]);
+  const array = new Uint8Array(data.buffer);
+  const key = str(array);
+  return prefix + key;
+}
+/**
+ * An iterable implementation of vector that stores its content on the trie.
+ * Uses the following map: index -> element
+ */
+class Vector {
+  /**
+   * @param prefix - The byte prefix to use when storing elements inside this collection.
+   * @param length - The initial length of the collection. By default 0.
+   */
+  constructor(prefix, length = 0) {
+    this.prefix = prefix;
+    this.length = length;
+  }
+  /**
+   * Checks whether the collection is empty.
+   */
+  isEmpty() {
+    return this.length === 0;
+  }
+  /**
+   * Get the data stored at the provided index.
+   *
+   * @param index - The index at which to look for the data.
+   * @param options - Options for retrieving the data.
+   */
+  get(index, options) {
+    if (index >= this.length) {
+      return options?.defaultValue ?? null;
+    }
+    const storageKey = indexToKey(this.prefix, index);
+    const value = storageReadRaw(bytes(storageKey));
+    return getValueWithOptions(value, options);
+  }
+  /**
+   * Removes an element from the vector and returns it in serialized form.
+   * The removed element is replaced by the last element of the vector.
+   * Does not preserve ordering, but is `O(1)`.
+   *
+   * @param index - The index at which to remove the element.
+   * @param options - Options for retrieving and storing the data.
+   */
+  swapRemove(index, options) {
+    assert(index < this.length, ERR_INDEX_OUT_OF_BOUNDS);
+    if (index + 1 === this.length) {
+      return this.pop(options);
+    }
+    const key = indexToKey(this.prefix, index);
+    const last = this.pop(options);
+    assert(storageWriteRaw(bytes(key), serializeValueWithOptions(last, options)), ERR_INCONSISTENT_STATE);
+    const value = storageGetEvictedRaw();
+    return getValueWithOptions(value, options);
+  }
+  /**
+   * Adds data to the collection.
+   *
+   * @param element - The data to store.
+   * @param options - Options for storing the data.
+   */
+  push(element, options) {
+    const key = indexToKey(this.prefix, this.length);
+    this.length += 1;
+    storageWriteRaw(bytes(key), serializeValueWithOptions(element, options));
+  }
+  /**
+   * Removes and retrieves the element with the highest index.
+   *
+   * @param options - Options for retrieving the data.
+   */
+  pop(options) {
+    if (this.isEmpty()) {
+      return options?.defaultValue ?? null;
+    }
+    const lastIndex = this.length - 1;
+    const lastKey = indexToKey(this.prefix, lastIndex);
+    this.length -= 1;
+    assert(storageRemoveRaw(bytes(lastKey)), ERR_INCONSISTENT_STATE);
+    const value = storageGetEvictedRaw();
+    return getValueWithOptions(value, options);
+  }
+  /**
+   * Replaces the data stored at the provided index with the provided data and returns the previously stored data.
+   *
+   * @param index - The index at which to replace the data.
+   * @param element - The data to replace with.
+   * @param options - Options for retrieving and storing the data.
+   */
+  replace(index, element, options) {
+    assert(index < this.length, ERR_INDEX_OUT_OF_BOUNDS);
+    const key = indexToKey(this.prefix, index);
+    assert(storageWriteRaw(bytes(key), serializeValueWithOptions(element, options)), ERR_INCONSISTENT_STATE);
+    const value = storageGetEvictedRaw();
+    return getValueWithOptions(value, options);
+  }
+  /**
+   * Extends the current collection with the passed in array of elements.
+   *
+   * @param elements - The elements to extend the collection with.
+   */
+  extend(elements) {
+    for (const element of elements) {
+      this.push(element);
+    }
+  }
+  [Symbol.iterator]() {
+    return new VectorIterator(this);
+  }
+  /**
+   * Create a iterator on top of the default collection iterator using custom options.
+   *
+   * @param options - Options for retrieving and storing the data.
+   */
+  createIteratorWithOptions(options) {
+    return {
+      [Symbol.iterator]: () => new VectorIterator(this, options)
+    };
+  }
+  /**
+   * Return a JavaScript array of the data stored within the collection.
+   *
+   * @param options - Options for retrieving and storing the data.
+   */
+  toArray(options) {
+    const array = [];
+    const iterator = options ? this.createIteratorWithOptions(options) : this;
+    for (const value of iterator) {
+      array.push(value);
+    }
+    return array;
+  }
+  /**
+   * Remove all of the elements stored within the collection.
+   */
+  clear() {
+    for (let index = 0; index < this.length; index++) {
+      const key = indexToKey(this.prefix, index);
+      storageRemoveRaw(bytes(key));
+    }
+    this.length = 0;
+  }
+  /**
+   * Serialize the collection.
+   *
+   * @param options - Options for storing the data.
+   */
+  serialize(options) {
+    return serializeValueWithOptions(this, options);
+  }
+  /**
+   * Converts the deserialized data from storage to a JavaScript instance of the collection.
+   *
+   * @param data - The deserialized data to create an instance from.
+   */
+  static reconstruct(data) {
+    const vector = new Vector(data.prefix, data.length);
+    return vector;
+  }
+}
+/**
+ * An iterator for the Vector collection.
+ */
+class VectorIterator {
+  /**
+   * @param vector - The vector collection to create an iterator for.
+   * @param options - Options for retrieving and storing data.
+   */
+  constructor(vector, options) {
+    this.vector = vector;
+    this.options = options;
+    this.current = 0;
+  }
+  next() {
+    if (this.current >= this.vector.length) {
+      return {
+        value: null,
+        done: true
+      };
+    }
+    const value = this.vector.get(this.current, this.options);
+    this.current += 1;
+    return {
+      value,
+      done: false
+    };
+  }
+}
+
+/**
+ * An unordered map that stores data in NEAR storage.
+ */
+class UnorderedMap {
+  /**
+   * @param prefix - The byte prefix to use when storing elements inside this collection.
+   */
+  constructor(prefix) {
+    this.prefix = prefix;
+    this._keys = new Vector(`${prefix}u`); // intentional different prefix with old UnorderedMap
+    this.values = new LookupMap(`${prefix}m`);
+  }
+  /**
+   * The number of elements stored in the collection.
+   */
+  get length() {
+    return this._keys.length;
+  }
+  /**
+   * Checks whether the collection is empty.
+   */
+  isEmpty() {
+    return this._keys.isEmpty();
+  }
+  /**
+   * Get the data stored at the provided key.
+   *
+   * @param key - The key at which to look for the data.
+   * @param options - Options for retrieving the data.
+   */
+  get(key, options) {
+    const valueAndIndex = this.values.get(key);
+    if (valueAndIndex === null) {
+      return options?.defaultValue ?? null;
+    }
+    const [value] = valueAndIndex;
+    return getValueWithOptions(encode(value), options);
+  }
+  /**
+   * Store a new value at the provided key.
+   *
+   * @param key - The key at which to store in the collection.
+   * @param value - The value to store in the collection.
+   * @param options - Options for retrieving and storing the data.
+   */
+  set(key, value, options) {
+    const valueAndIndex = this.values.get(key);
+    const serialized = serializeValueWithOptions(value, options);
+    if (valueAndIndex === null) {
+      const newElementIndex = this.length;
+      this._keys.push(key);
+      this.values.set(key, [decode(serialized), newElementIndex]);
+      return null;
+    }
+    const [oldValue, oldIndex] = valueAndIndex;
+    this.values.set(key, [decode(serialized), oldIndex]);
+    return getValueWithOptions(encode(oldValue), options);
+  }
+  /**
+   * Removes and retrieves the element with the provided key.
+   *
+   * @param key - The key at which to remove data.
+   * @param options - Options for retrieving the data.
+   */
+  remove(key, options) {
+    const oldValueAndIndex = this.values.remove(key);
+    if (oldValueAndIndex === null) {
+      return options?.defaultValue ?? null;
+    }
+    const [value, index] = oldValueAndIndex;
+    assert(this._keys.swapRemove(index) !== null, ERR_INCONSISTENT_STATE);
+    // the last key is swapped to key[index], the corresponding [value, index] need update
+    if (!this._keys.isEmpty() && index !== this._keys.length) {
+      // if there is still elements and it was not the last element
+      const swappedKey = this._keys.get(index);
+      const swappedValueAndIndex = this.values.get(swappedKey);
+      assert(swappedValueAndIndex !== null, ERR_INCONSISTENT_STATE);
+      this.values.set(swappedKey, [swappedValueAndIndex[0], index]);
+    }
+    return getValueWithOptions(encode(value), options);
+  }
+  /**
+   * Remove all of the elements stored within the collection.
+   */
+  clear() {
+    for (const key of this._keys) {
+      // Set instead of remove to avoid loading the value from storage.
+      this.values.set(key, null);
+    }
+    this._keys.clear();
+  }
+  [Symbol.iterator]() {
+    return new UnorderedMapIterator(this);
+  }
+  /**
+   * Create a iterator on top of the default collection iterator using custom options.
+   *
+   * @param options - Options for retrieving and storing the data.
+   */
+  createIteratorWithOptions(options) {
+    return {
+      [Symbol.iterator]: () => new UnorderedMapIterator(this, options)
+    };
+  }
+  /**
+   * Return a JavaScript array of the data stored within the collection.
+   *
+   * @param options - Options for retrieving and storing the data.
+   */
+  toArray(options) {
+    const array = [];
+    const iterator = options ? this.createIteratorWithOptions(options) : this;
+    for (const value of iterator) {
+      array.push(value);
+    }
+    return array;
+  }
+  /**
+   * Extends the current collection with the passed in array of key-value pairs.
+   *
+   * @param keyValuePairs - The key-value pairs to extend the collection with.
+   */
+  extend(keyValuePairs) {
+    for (const [key, value] of keyValuePairs) {
+      this.set(key, value);
+    }
+  }
+  /**
+   * Serialize the collection.
+   *
+   * @param options - Options for storing the data.
+   */
+  serialize(options) {
+    return serializeValueWithOptions(this, options);
+  }
+  /**
+   * Converts the deserialized data from storage to a JavaScript instance of the collection.
+   *
+   * @param data - The deserialized data to create an instance from.
+   */
+  static reconstruct(data) {
+    const map = new UnorderedMap(data.prefix);
+    // reconstruct keys Vector
+    map._keys = new Vector(`${data.prefix}u`);
+    map._keys.length = data._keys.length;
+    // reconstruct values LookupMap
+    map.values = new LookupMap(`${data.prefix}m`);
+    return map;
+  }
+  keys({
+    start,
+    limit
+  }) {
+    const ret = [];
+    if (start === undefined) {
+      start = 0;
+    }
+    if (limit == undefined) {
+      limit = this.length - start;
+    }
+    for (let i = start; i < start + limit; i++) {
+      ret.push(this._keys.get(i));
+    }
+    return ret;
+  }
+}
+/**
+ * An iterator for the UnorderedMap collection.
+ */
+class UnorderedMapIterator {
+  /**
+   * @param unorderedMap - The unordered map collection to create an iterator for.
+   * @param options - Options for retrieving and storing data.
+   */
+  constructor(unorderedMap, options) {
+    this.options = options;
+    this.keys = new VectorIterator(unorderedMap._keys);
+    this.map = unorderedMap.values;
+  }
+  next() {
+    const key = this.keys.next();
+    if (key.done) {
+      return {
+        value: [key.value, null],
+        done: key.done
+      };
+    }
+    const valueAndIndex = this.map.get(key.value);
+    assert(valueAndIndex !== null, ERR_INCONSISTENT_STATE);
+    return {
+      done: key.done,
+      value: [key.value, getValueWithOptions(encode(valueAndIndex[0]), this.options)]
+    };
+  }
+}
+
+function serializeIndex(index) {
+  const data = new Uint32Array([index]);
+  const array = new Uint8Array(data.buffer);
+  return array;
+}
+function deserializeIndex(rawIndex) {
+  const [data] = new Uint32Array(rawIndex.buffer);
+  return data;
+}
+/**
+ * An unordered set that stores data in NEAR storage.
+ */
+class UnorderedSet {
+  /**
+   * @param prefix - The byte prefix to use when storing elements inside this collection.
+   */
+  constructor(prefix) {
+    this.prefix = prefix;
+    this.elementIndexPrefix = `${prefix}i`;
+    this._elements = new Vector(`${prefix}e`);
+  }
+  /**
+   * The number of elements stored in the collection.
+   */
+  get length() {
+    return this._elements.length;
+  }
+  /**
+   * Checks whether the collection is empty.
+   */
+  isEmpty() {
+    return this._elements.isEmpty();
+  }
+  /**
+   * Checks whether the collection contains the value.
+   *
+   * @param element - The value for which to check the presence.
+   * @param options - Options for storing data.
+   */
+  contains(element, options) {
+    const indexLookup = this.elementIndexPrefix + serializeValueWithOptions(element, options);
+    return storageHasKey(indexLookup);
+  }
+  /**
+   * If the set did not have this value present, `true` is returned.
+   * If the set did have this value present, `false` is returned.
+   *
+   * @param element - The value to store in the collection.
+   * @param options - Options for storing the data.
+   */
+  set(element, options) {
+    const indexLookup = this.elementIndexPrefix + serializeValueWithOptions(element, options);
+    if (storageRead(indexLookup)) {
+      return false;
+    }
+    const nextIndex = this.length;
+    const nextIndexRaw = serializeIndex(nextIndex);
+    storageWriteRaw(encode(indexLookup), nextIndexRaw);
+    this._elements.push(element, options);
+    return true;
+  }
+  /**
+   * Returns true if the element was present in the set.
+   *
+   * @param element - The entry to remove.
+   * @param options - Options for retrieving and storing data.
+   */
+  remove(element, options) {
+    const indexLookup = this.elementIndexPrefix + serializeValueWithOptions(element, options);
+    const indexRaw = storageReadRaw(encode(indexLookup));
+    if (!indexRaw) {
+      return false;
+    }
+    // If there is only one element then swap remove simply removes it without
+    // swapping with the last element.
+    if (this.length === 1) {
+      storageRemove(indexLookup);
+      const index = deserializeIndex(indexRaw);
+      this._elements.swapRemove(index);
+      return true;
+    }
+    // If there is more than one element then swap remove swaps it with the last
+    // element.
+    const lastElement = this._elements.get(this.length - 1, options);
+    assert(!!lastElement, ERR_INCONSISTENT_STATE);
+    storageRemove(indexLookup);
+    // If the removed element was the last element from keys, then we don't need to
+    // reinsert the lookup back.
+    if (lastElement !== element) {
+      const lastLookupElement = this.elementIndexPrefix + serializeValueWithOptions(lastElement, options);
+      storageWriteRaw(encode(lastLookupElement), indexRaw);
+    }
+    const index = deserializeIndex(indexRaw);
+    this._elements.swapRemove(index);
+    return true;
+  }
+  /**
+   * Remove all of the elements stored within the collection.
+   */
+  clear(options) {
+    for (const element of this._elements) {
+      const indexLookup = this.elementIndexPrefix + serializeValueWithOptions(element, options);
+      storageRemove(indexLookup);
+    }
+    this._elements.clear();
+  }
+  [Symbol.iterator]() {
+    return this._elements[Symbol.iterator]();
+  }
+  /**
+   * Create a iterator on top of the default collection iterator using custom options.
+   *
+   * @param options - Options for retrieving and storing the data.
+   */
+  createIteratorWithOptions(options) {
+    return {
+      [Symbol.iterator]: () => new VectorIterator(this._elements, options)
+    };
+  }
+  /**
+   * Return a JavaScript array of the data stored within the collection.
+   *
+   * @param options - Options for retrieving and storing the data.
+   */
+  toArray(options) {
+    const array = [];
+    const iterator = options ? this.createIteratorWithOptions(options) : this;
+    for (const value of iterator) {
+      array.push(value);
+    }
+    return array;
+  }
+  /**
+   * Extends the current collection with the passed in array of elements.
+   *
+   * @param elements - The elements to extend the collection with.
+   */
+  extend(elements) {
+    for (const element of elements) {
+      this.set(element);
+    }
+  }
+  /**
+   * Serialize the collection.
+   *
+   * @param options - Options for storing the data.
+   */
+  serialize(options) {
+    return serializeValueWithOptions(this, options);
+  }
+  /**
+   * Converts the deserialized data from storage to a JavaScript instance of the collection.
+   *
+   * @param data - The deserialized data to create an instance from.
+   */
+  static reconstruct(data) {
+    const set = new UnorderedSet(data.prefix);
+    // reconstruct Vector
+    const elementsPrefix = data.prefix + "e";
+    set._elements = new Vector(elementsPrefix);
+    set._elements.length = data._elements.length;
+    return set;
+  }
+  elements({
+    options,
+    start,
+    limit
+  }) {
+    const ret = [];
+    if (start === undefined) {
+      start = 0;
+    }
+    if (limit == undefined) {
+      limit = this.length - start;
+    }
+    for (let i = start; i < start + limit; i++) {
+      ret.push(this._elements.get(i, options));
+    }
+    return ret;
+  }
 }
 
 /**
@@ -588,48 +1332,285 @@ function NearBindgen({
   };
 }
 
-var _dec, _dec2, _dec3, _class, _class2;
-let HelloNear = (_dec = NearBindgen({}), _dec2 = view(), _dec3 = call({}), _dec(_class = (_class2 = class HelloNear {
-  message = "Hello";
-  // This method is read-only and can be called for free
-  get_greeting() {
-    return this.message;
-  }
-  // This method changes the state, for which it cost gas
-  set_greeting({
-    message
+var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _class, _class2;
+let VotingContract = (_dec = NearBindgen({}), _dec2 = call({}), _dec3 = call({}), _dec4 = call({}), _dec5 = call({}), _dec6 = call({}), _dec7 = call({}), _dec8 = view(), _dec9 = view(), _dec10 = view(), _dec11 = view(), _dec12 = view(), _dec13 = view(), _dec(_class = (_class2 = class VotingContract {
+  // Caandidate Pair used to store Candidate Names and URL Links
+  candidatePair = new UnorderedMap('candidatePair');
+
+  // Prompt Set
+  promptSet = new UnorderedSet('promptArray');
+
+  // voteArray value stored in Map
+  voteArray = new UnorderedMap('voteArray');
+
+  // Keeping track of user participation
+  userParticipation = new UnorderedMap('userParticipation');
+
+  // Call Methods
+
+  addCandidatePair({
+    prompt,
+    name1,
+    name2,
+    url1,
+    url2
   }) {
-    log(`Saving greeting ${message}`);
-    this.message = message;
+    this.candidatePair.set(prompt, [name1, url1, name2, url2]);
   }
-}, (_applyDecoratedDescriptor(_class2.prototype, "get_greeting", [_dec2], Object.getOwnPropertyDescriptor(_class2.prototype, "get_greeting"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "set_greeting", [_dec3], Object.getOwnPropertyDescriptor(_class2.prototype, "set_greeting"), _class2.prototype)), _class2)) || _class);
-function set_greeting() {
-  const _state = HelloNear._getState();
-  if (!_state && HelloNear._requireInit()) {
+  initializeVotes({
+    prompt
+  }) {
+    this.voteArray.set(prompt, [0, 0]);
+  }
+  addToPromptArray({
+    prompt
+  }) {
+    this.promptSet.set(prompt);
+  }
+  clearPromptArray() {
+    this.promptSet.clear();
+    this.candidatePair.clear();
+    this.userParticipation.clear();
+    this.voteArray.clear();
+    log("Clearing Polls");
+  }
+  addVote({
+    prompt,
+    index
+  }) {
+    let currentVotes = this.voteArray.get(prompt, {
+      defaultValue: [0, 0]
+    });
+    currentVotes[index] = currentVotes[index] + 1;
+    this.voteArray.set(prompt, currentVotes);
+  }
+  recordUser({
+    prompt,
+    user
+  }) {
+    let currentArray = this.userParticipation.get(prompt, {
+      defaultValue: []
+    });
+    currentArray.includes(user) ? null : currentArray.push(user);
+    this.userParticipation.set(prompt, currentArray);
+  }
+
+  // @call({}) // This method changes the state, for which it cost gas
+  // set_greeting({ message }: { message: string }): void {
+  //   near.log(`Saving greeting ${message}`);
+  //   this.message = message;
+  // }
+
+  // View Methods
+
+  getUrl({
+    prompt,
+    name
+  }) {
+    log(prompt);
+    let candidateArray = this.candidatePair.get(prompt);
+    return candidateArray[candidateArray.indexOf(name) + 1];
+  }
+  didParticipate({
+    prompt,
+    user
+  }) {
+    let promptUserList = this.userParticipation.get(prompt, {
+      defaultValue: []
+    });
+    return promptUserList.includes(user);
+  }
+  participationArray({
+    prompt
+  }) {
+    return this.userParticipation.get(prompt);
+  }
+  getAllPrompt() {
+    return this.promptSet.toArray();
+  }
+  getVotes({
+    prompt
+  }) {
+    return this.voteArray.get(prompt, {
+      defaultValue: []
+    });
+  }
+  getCandidatePair({
+    prompt
+  }) {
+    let candidateArray = this.candidatePair.get(prompt, {
+      defaultValue: ["n/a", "n/a", "n/a", "n/a"]
+    });
+    return [candidateArray[0], candidateArray[2]];
+  }
+
+  // @view({}) // This method is read-only and can be called for free
+  // get_greeting(): string {
+  //   return this.message;
+  // }
+}, (_applyDecoratedDescriptor(_class2.prototype, "addCandidatePair", [_dec2], Object.getOwnPropertyDescriptor(_class2.prototype, "addCandidatePair"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "initializeVotes", [_dec3], Object.getOwnPropertyDescriptor(_class2.prototype, "initializeVotes"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "addToPromptArray", [_dec4], Object.getOwnPropertyDescriptor(_class2.prototype, "addToPromptArray"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "clearPromptArray", [_dec5], Object.getOwnPropertyDescriptor(_class2.prototype, "clearPromptArray"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "addVote", [_dec6], Object.getOwnPropertyDescriptor(_class2.prototype, "addVote"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "recordUser", [_dec7], Object.getOwnPropertyDescriptor(_class2.prototype, "recordUser"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getUrl", [_dec8], Object.getOwnPropertyDescriptor(_class2.prototype, "getUrl"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "didParticipate", [_dec9], Object.getOwnPropertyDescriptor(_class2.prototype, "didParticipate"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "participationArray", [_dec10], Object.getOwnPropertyDescriptor(_class2.prototype, "participationArray"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getAllPrompt", [_dec11], Object.getOwnPropertyDescriptor(_class2.prototype, "getAllPrompt"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getVotes", [_dec12], Object.getOwnPropertyDescriptor(_class2.prototype, "getVotes"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "getCandidatePair", [_dec13], Object.getOwnPropertyDescriptor(_class2.prototype, "getCandidatePair"), _class2.prototype)), _class2)) || _class);
+function getCandidatePair() {
+  const _state = VotingContract._getState();
+  if (!_state && VotingContract._requireInit()) {
     throw new Error("Contract must be initialized");
   }
-  const _contract = HelloNear._create();
+  const _contract = VotingContract._create();
   if (_state) {
-    HelloNear._reconstruct(_contract, _state);
+    VotingContract._reconstruct(_contract, _state);
   }
-  const _args = HelloNear._getArgs();
-  const _result = _contract.set_greeting(_args);
-  HelloNear._saveToStorage(_contract);
-  if (_result !== undefined) if (_result && _result.constructor && _result.constructor.name === "NearPromise") _result.onReturn();else env.value_return(HelloNear._serialize(_result, true));
+  const _args = VotingContract._getArgs();
+  const _result = _contract.getCandidatePair(_args);
+  if (_result !== undefined) if (_result && _result.constructor && _result.constructor.name === "NearPromise") _result.onReturn();else env.value_return(VotingContract._serialize(_result, true));
 }
-function get_greeting() {
-  const _state = HelloNear._getState();
-  if (!_state && HelloNear._requireInit()) {
+function getVotes() {
+  const _state = VotingContract._getState();
+  if (!_state && VotingContract._requireInit()) {
     throw new Error("Contract must be initialized");
   }
-  const _contract = HelloNear._create();
+  const _contract = VotingContract._create();
   if (_state) {
-    HelloNear._reconstruct(_contract, _state);
+    VotingContract._reconstruct(_contract, _state);
   }
-  const _args = HelloNear._getArgs();
-  const _result = _contract.get_greeting(_args);
-  if (_result !== undefined) if (_result && _result.constructor && _result.constructor.name === "NearPromise") _result.onReturn();else env.value_return(HelloNear._serialize(_result, true));
+  const _args = VotingContract._getArgs();
+  const _result = _contract.getVotes(_args);
+  if (_result !== undefined) if (_result && _result.constructor && _result.constructor.name === "NearPromise") _result.onReturn();else env.value_return(VotingContract._serialize(_result, true));
+}
+function getAllPrompt() {
+  const _state = VotingContract._getState();
+  if (!_state && VotingContract._requireInit()) {
+    throw new Error("Contract must be initialized");
+  }
+  const _contract = VotingContract._create();
+  if (_state) {
+    VotingContract._reconstruct(_contract, _state);
+  }
+  const _args = VotingContract._getArgs();
+  const _result = _contract.getAllPrompt(_args);
+  if (_result !== undefined) if (_result && _result.constructor && _result.constructor.name === "NearPromise") _result.onReturn();else env.value_return(VotingContract._serialize(_result, true));
+}
+function participationArray() {
+  const _state = VotingContract._getState();
+  if (!_state && VotingContract._requireInit()) {
+    throw new Error("Contract must be initialized");
+  }
+  const _contract = VotingContract._create();
+  if (_state) {
+    VotingContract._reconstruct(_contract, _state);
+  }
+  const _args = VotingContract._getArgs();
+  const _result = _contract.participationArray(_args);
+  if (_result !== undefined) if (_result && _result.constructor && _result.constructor.name === "NearPromise") _result.onReturn();else env.value_return(VotingContract._serialize(_result, true));
+}
+function didParticipate() {
+  const _state = VotingContract._getState();
+  if (!_state && VotingContract._requireInit()) {
+    throw new Error("Contract must be initialized");
+  }
+  const _contract = VotingContract._create();
+  if (_state) {
+    VotingContract._reconstruct(_contract, _state);
+  }
+  const _args = VotingContract._getArgs();
+  const _result = _contract.didParticipate(_args);
+  if (_result !== undefined) if (_result && _result.constructor && _result.constructor.name === "NearPromise") _result.onReturn();else env.value_return(VotingContract._serialize(_result, true));
+}
+function getUrl() {
+  const _state = VotingContract._getState();
+  if (!_state && VotingContract._requireInit()) {
+    throw new Error("Contract must be initialized");
+  }
+  const _contract = VotingContract._create();
+  if (_state) {
+    VotingContract._reconstruct(_contract, _state);
+  }
+  const _args = VotingContract._getArgs();
+  const _result = _contract.getUrl(_args);
+  if (_result !== undefined) if (_result && _result.constructor && _result.constructor.name === "NearPromise") _result.onReturn();else env.value_return(VotingContract._serialize(_result, true));
+}
+function recordUser() {
+  const _state = VotingContract._getState();
+  if (!_state && VotingContract._requireInit()) {
+    throw new Error("Contract must be initialized");
+  }
+  const _contract = VotingContract._create();
+  if (_state) {
+    VotingContract._reconstruct(_contract, _state);
+  }
+  const _args = VotingContract._getArgs();
+  const _result = _contract.recordUser(_args);
+  VotingContract._saveToStorage(_contract);
+  if (_result !== undefined) if (_result && _result.constructor && _result.constructor.name === "NearPromise") _result.onReturn();else env.value_return(VotingContract._serialize(_result, true));
+}
+function addVote() {
+  const _state = VotingContract._getState();
+  if (!_state && VotingContract._requireInit()) {
+    throw new Error("Contract must be initialized");
+  }
+  const _contract = VotingContract._create();
+  if (_state) {
+    VotingContract._reconstruct(_contract, _state);
+  }
+  const _args = VotingContract._getArgs();
+  const _result = _contract.addVote(_args);
+  VotingContract._saveToStorage(_contract);
+  if (_result !== undefined) if (_result && _result.constructor && _result.constructor.name === "NearPromise") _result.onReturn();else env.value_return(VotingContract._serialize(_result, true));
+}
+function clearPromptArray() {
+  const _state = VotingContract._getState();
+  if (!_state && VotingContract._requireInit()) {
+    throw new Error("Contract must be initialized");
+  }
+  const _contract = VotingContract._create();
+  if (_state) {
+    VotingContract._reconstruct(_contract, _state);
+  }
+  const _args = VotingContract._getArgs();
+  const _result = _contract.clearPromptArray(_args);
+  VotingContract._saveToStorage(_contract);
+  if (_result !== undefined) if (_result && _result.constructor && _result.constructor.name === "NearPromise") _result.onReturn();else env.value_return(VotingContract._serialize(_result, true));
+}
+function addToPromptArray() {
+  const _state = VotingContract._getState();
+  if (!_state && VotingContract._requireInit()) {
+    throw new Error("Contract must be initialized");
+  }
+  const _contract = VotingContract._create();
+  if (_state) {
+    VotingContract._reconstruct(_contract, _state);
+  }
+  const _args = VotingContract._getArgs();
+  const _result = _contract.addToPromptArray(_args);
+  VotingContract._saveToStorage(_contract);
+  if (_result !== undefined) if (_result && _result.constructor && _result.constructor.name === "NearPromise") _result.onReturn();else env.value_return(VotingContract._serialize(_result, true));
+}
+function initializeVotes() {
+  const _state = VotingContract._getState();
+  if (!_state && VotingContract._requireInit()) {
+    throw new Error("Contract must be initialized");
+  }
+  const _contract = VotingContract._create();
+  if (_state) {
+    VotingContract._reconstruct(_contract, _state);
+  }
+  const _args = VotingContract._getArgs();
+  const _result = _contract.initializeVotes(_args);
+  VotingContract._saveToStorage(_contract);
+  if (_result !== undefined) if (_result && _result.constructor && _result.constructor.name === "NearPromise") _result.onReturn();else env.value_return(VotingContract._serialize(_result, true));
+}
+function addCandidatePair() {
+  const _state = VotingContract._getState();
+  if (!_state && VotingContract._requireInit()) {
+    throw new Error("Contract must be initialized");
+  }
+  const _contract = VotingContract._create();
+  if (_state) {
+    VotingContract._reconstruct(_contract, _state);
+  }
+  const _args = VotingContract._getArgs();
+  const _result = _contract.addCandidatePair(_args);
+  VotingContract._saveToStorage(_contract);
+  if (_result !== undefined) if (_result && _result.constructor && _result.constructor.name === "NearPromise") _result.onReturn();else env.value_return(VotingContract._serialize(_result, true));
 }
 
-export { get_greeting, set_greeting };
+export { addCandidatePair, addToPromptArray, addVote, clearPromptArray, didParticipate, getAllPrompt, getCandidatePair, getUrl, getVotes, initializeVotes, participationArray, recordUser };
 //# sourceMappingURL=hello_near.js.map
