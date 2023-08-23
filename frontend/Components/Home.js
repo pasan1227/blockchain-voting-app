@@ -1,9 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Table, Container, Button, Row, Card } from "react-bootstrap";
+import { async } from "regenerator-runtime";
 
 const Home = (props) => {
-  const [disabledButton, setDisabledButton] = useState(false);
+  const [disableButton, setDisableButton] = useState(false);
   const [promptList, setPromptList] = useState([]);
+
+  useEffect(() => {
+    const getInfo = async () => {
+      let output = await props.getPrompts();
+      setPromptList(output);
+      if (output.length === 0) {
+        setDisableButton(true);
+      }
+    };
+    getInfo()
+  },[]);
 
   return (
     <Container>

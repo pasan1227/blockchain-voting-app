@@ -15,7 +15,6 @@ import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 import Home from "./Components/Home";
 import NewPoll from "./Components/NewPoll";
 import PollingStation from "./Components/PollingStation";
-import { format } from "path";
 
 export default function App({ isSignedIn, contractId, wallet }) {
   const signInFunction = () => {
@@ -25,13 +24,58 @@ export default function App({ isSignedIn, contractId, wallet }) {
     wallet.signOut();
   };
 
+  const callMethod = async (methodName, args = {}) => {
+    await wallet.callMethod({
+      contractId: contractId,
+      method: methodName,
+      args: args,
+    });
+  };
+
+  const viewMethod = async (methodName, args = {}) => {
+    return await wallet.viewMethod({
+      contractId: contractId,
+      method: methodName,
+      args: args,
+    });
+  };
+
+  const getPrompts = async () => {
+    let output = await viewMethod("GetAllPrompts");
+    console.log(output);
+    return output;
+  };
+
   const displayHome = () => {
     if (isSignedIn) {
       return (
         <Routes>
-          <Route path="/" element={<Home />}></Route>
-          <Route path="/new-poll" element={<NewPoll />}></Route>
-          <Route path="/polling-station" element={<PollingStation />}></Route>
+          <Route
+            path="/"
+            element={
+              <Home
+                callMethod={callMethod}
+                viewMethod={viewMethod}
+                getPrompts={getPrompts}
+              />
+            }
+          ></Route>
+          <Route
+            path="/new-poll"
+            element={
+              <NewPoll
+                callMethod={callMethod}
+                viewMethod={viewMethod}
+                getPrompts={getPrompts}
+              />
+            }
+          ></Route>
+          <Route
+            path="/polling-station"
+            element={
+              <PollingStation callMethod={callMethod} viewMethod={viewMethod} />
+            }
+          ></Route>
         </Routes>
       );
     } else {
