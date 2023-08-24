@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Table, Container, Button, Row, Card } from "react-bootstrap";
-import { async } from "regenerator-runtime";
 
 const Home = (props) => {
   const [disableButton, setDisableButton] = useState(false);

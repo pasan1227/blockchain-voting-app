@@ -14,6 +14,7 @@ const NewPoll = (props) => {
   const [displayMessage, setDisplayMessage] = useState(false);
 
   const sendToBlockchain = async () => {
+    setDisableButton(true);
     await props.callMethod("addCandidatePair", {
       prompt: promptRef.current.value,
       name1: candidateName1.current.value,
