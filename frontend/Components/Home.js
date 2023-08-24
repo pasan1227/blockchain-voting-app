@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Table, Container, Button, Row, Card } from "react-bootstrap";
-import { async } from "regenerator-runtime";
 
 const Home = (props) => {
   const [disableButton, setDisableButton] = useState(false);
@@ -14,8 +13,8 @@ const Home = (props) => {
         setDisableButton(true);
       }
     };
-    getInfo()
-  },[]);
+    getInfo();
+  }, []);
 
   return (
     <Container>
@@ -29,6 +28,7 @@ const Home = (props) => {
         </thead>
         <tbody>
           {promptList.map((item, index) => {
+            console.log(promptList);
             if (promptList.length) {
               return (
                 <tr key={index}>

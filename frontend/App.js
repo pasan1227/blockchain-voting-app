@@ -41,7 +41,7 @@ export default function App({ isSignedIn, contractId, wallet }) {
   };
 
   const getPrompts = async () => {
-    let output = await viewMethod("GetAllPrompts");
+    let output = await viewMethod("getAllPrompts");
     console.log(output);
     return output;
   };
