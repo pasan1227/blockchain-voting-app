@@ -1334,7 +1334,7 @@ function NearBindgen({
 
 var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _class, _class2;
 let VotingContract = (_dec = NearBindgen({}), _dec2 = call({}), _dec3 = call({}), _dec4 = call({}), _dec5 = call({}), _dec6 = call({}), _dec7 = call({}), _dec8 = view(), _dec9 = view(), _dec10 = view(), _dec11 = view(), _dec12 = view(), _dec13 = view(), _dec(_class = (_class2 = class VotingContract {
-  // Caandidate Pair used to store Candidate Names and URL Links
+  // Candidate Pair used to store Candidate Names and URL Links
   candidatePair = new UnorderedMap("candidatePair");
 
   // Prompt Set

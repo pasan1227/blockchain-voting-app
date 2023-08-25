@@ -27,7 +27,12 @@ const Home = (props) => {
           </tr>
         </thead>
         <tbody>
+<<<<<<< HEAD
           {promptList.map((promptName, index) => {
+=======
+          {promptList.map((item, index) => {
+            console.log(promptList);
+>>>>>>> 140a9ac5870dcc4703b90e1f3da8f7ff4a789078
             if (promptList.length) {
               return (
                 <tr key={index}>
