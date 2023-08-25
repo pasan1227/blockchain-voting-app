@@ -27,15 +27,20 @@ const Home = (props) => {
           </tr>
         </thead>
         <tbody>
-          {promptList.map((item, index) => {
-            console.log(promptList);
+          {promptList.map((promptName, index) => {
             if (promptList.length) {
               return (
                 <tr key={index}>
                   <td>{index + 1}</td>
-                  <td>{item}</td>
+                  <td>{promptName}</td>
                   <td>
-                    <Button>Go to Poll</Button>
+                    <Button
+                      onClick={() => {
+                        props.changeCandidates(promptName);
+                      }}
+                    >
+                      Go to Poll
+                    </Button>
                   </td>
                 </tr>
               );
