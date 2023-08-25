@@ -46,6 +46,14 @@ export default function App({ isSignedIn, contractId, wallet }) {
     return output;
   };
 
+  const changeCandidatesFunction = async (prompt) => {
+    let namePair = await viewMethod("getCandidatePair", { prompt: prompt });
+    await localStorage.setItem("Candidate1", namePair[0]);
+    await localStorage.setItem("Candidate2", namePair[1]);
+    await localStorage.setItem("prompt", prompt);
+    window.location.replace(window.location.href + "polling-station");
+  };
+
   const displayHome = () => {
     if (isSignedIn) {
       return (
@@ -57,6 +65,7 @@ export default function App({ isSignedIn, contractId, wallet }) {
                 callMethod={callMethod}
                 viewMethod={viewMethod}
                 getPrompts={getPrompts}
+                changeCandidates={changeCandidatesFunction}
               />
             }
           ></Route>
@@ -73,7 +82,11 @@ export default function App({ isSignedIn, contractId, wallet }) {
           <Route
             path="/polling-station"
             element={
-              <PollingStation callMethod={callMethod} viewMethod={viewMethod} />
+              <PollingStation
+                callMethod={callMethod}
+                viewMethod={viewMethod}
+                wallet={wallet}
+              />
             }
           ></Route>
         </Routes>
