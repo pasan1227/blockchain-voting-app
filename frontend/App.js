@@ -12,11 +12,11 @@ import { Card, Button, Row } from "react-bootstrap";
 
 import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 
-import Polls from "./Components/Polls";
-import NewPoll from "./Components/NewPoll";
-import PollingStation from "./Components/PollingStation";
-
 import Home from "./pages/Home";
+import Polls from "./pages/Polls";
+import NewPoll from "./pages/NewPoll";
+import PollingStation from "./pages/PollingStation";
+
 
 export default function App({ isSignedIn, contractId, wallet }) {
   const signInFunction = () => {
@@ -127,14 +127,16 @@ export default function App({ isSignedIn, contractId, wallet }) {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
-              <Nav>
-                <Nav.Link href="#deets">Get Started</Nav.Link>
-                <Nav.Link href="#memes">
-                  About Us
-                </Nav.Link>
-              </Nav>
+              {/* <Nav>
+                <Nav.Link href="/get-started">Get Started</Nav.Link>
+                <Nav.Link href="about-us">About Us</Nav.Link>
+                <Nav.Link href="contact-us">Contact Us</Nav.Link>
+              </Nav> */}
             </Nav>
             <Nav>
+              <Nav.Link href="/get-started">Get Started</Nav.Link>
+              <Nav.Link href="about-us">About Us</Nav.Link>
+              <Nav.Link href="contact-us">Contact Us</Nav.Link>
               <Nav.Link disabled={!isSignedIn} href="/new-poll">
                 New Poll
               </Nav.Link>
