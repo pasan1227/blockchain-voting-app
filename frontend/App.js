@@ -14,6 +14,7 @@ import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 
 import Home from "./pages/Home";
 import GetStarted from "./pages/GetStarted";
+import AboutUs from "./pages/AboutUs";
 import Polls from "./pages/Polls";
 import NewPoll from "./pages/NewPoll";
 import PollingStation from "./pages/PollingStation";
@@ -62,6 +63,7 @@ export default function App({ isSignedIn, contractId, wallet }) {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/get-started" element={<GetStarted />} />
+          <Route path="/about-us" element={<AboutUs />} />
           <Route
             path="/polls"
             element={
@@ -131,8 +133,8 @@ export default function App({ isSignedIn, contractId, wallet }) {
             <Nav>
               <Nav.Link href="/">Home</Nav.Link>
               <Nav.Link href="/get-started">Get Started</Nav.Link>
-              <Nav.Link href="about-us">About Us</Nav.Link>
-              <Nav.Link href="contact-us">Contact Us</Nav.Link>
+              <Nav.Link href="/about-us">About Us</Nav.Link>
+              <Nav.Link href="/contact-us">Contact Us</Nav.Link>
               <Nav.Link disabled={!isSignedIn} href="/new-poll">
                 New Poll
               </Nav.Link>
