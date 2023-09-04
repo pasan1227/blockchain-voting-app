@@ -2,6 +2,7 @@ import React from "react";
 import HeroSection from "../components/HeroSection";
 import FeatureSection from "../components/FeatureSection";
 import NewsletterSection from "../components/NewsLetterSection";
+import Footer from "../components/Footer";
 
 export default function HeroImage() {
   return (
@@ -9,6 +10,7 @@ export default function HeroImage() {
       <HeroSection />
       <FeatureSection />
       <NewsletterSection />
+      <Footer />
     </>
   );
 }

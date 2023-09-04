@@ -12,11 +12,11 @@ import { Card, Button, Row } from "react-bootstrap";
 
 import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 
+import Home from "./pages/Home";
 import Polls from "./pages/Polls";
 import NewPoll from "./pages/NewPoll";
 import PollingStation from "./pages/PollingStation";
 
-import Home from "./pages/Home";
 
 export default function App({ isSignedIn, contractId, wallet }) {
   const signInFunction = () => {
