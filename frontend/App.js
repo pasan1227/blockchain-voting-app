@@ -12,7 +12,7 @@ import { Card, Button, Row } from "react-bootstrap";
 
 import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 
-import Home from "./Components/Home";
+import Polls from "./Components/Polls";
 import NewPoll from "./Components/NewPoll";
 import PollingStation from "./Components/PollingStation";
 
@@ -59,9 +59,9 @@ export default function App({ isSignedIn, contractId, wallet }) {
       return (
         <Routes>
           <Route
-            path="/"
+            path="/polls"
             element={
-              <Home
+              <Polls
                 callMethod={callMethod}
                 viewMethod={viewMethod}
                 getPrompts={getPrompts}

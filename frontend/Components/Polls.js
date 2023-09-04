@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Table, Container, Button, Row, Card } from "react-bootstrap";
 
-const Home = (props) => {
+const Polls = (props) => {
   const [disableButton, setDisableButton] = useState(false);
   const [promptList, setPromptList] = useState([]);
 
@@ -69,4 +69,4 @@ const Home = (props) => {
   );
 };
 
-export default Home;
+export default Polls;
