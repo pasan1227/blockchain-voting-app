@@ -16,6 +16,8 @@ import Polls from "./Components/Polls";
 import NewPoll from "./Components/NewPoll";
 import PollingStation from "./Components/PollingStation";
 
+import Home from "./pages/Home";
+
 export default function App({ isSignedIn, contractId, wallet }) {
   const signInFunction = () => {
     wallet.signIn();
@@ -58,6 +60,7 @@ export default function App({ isSignedIn, contractId, wallet }) {
     if (isSignedIn) {
       return (
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route
             path="/polls"
             element={
@@ -113,12 +116,24 @@ export default function App({ isSignedIn, contractId, wallet }) {
 
   return (
     <Router>
-      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+      <Navbar
+        className="navbar navbar-dark"
+        collapseOnSelect
+        expand="lg"
+        style={{ backgroundColor: "black" }}
+      >
         <Container>
           <Navbar.Brand href="/">B-VOTE</Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav className="me-auto"></Nav>
+            <Nav className="me-auto">
+              <Nav>
+                <Nav.Link href="#deets">Get Started</Nav.Link>
+                <Nav.Link href="#memes">
+                  About Us
+                </Nav.Link>
+              </Nav>
+            </Nav>
             <Nav>
               <Nav.Link disabled={!isSignedIn} href="/new-poll">
                 New Poll
