@@ -14,19 +14,28 @@ const HeroSection = () => {
             backgroundRepeat: "no-repeat",
           }}
         >
-          <div className="d-flex justify-content-center align-items-center h-100">
-            <div className="text-white">
-              <h1 className="mb-3">Welcome to B-Vote</h1>
-              <h4 className="mb-3">
-                A blockchain-based solution for secure and transparent voting.
-              </h4>
-              <a
-                className="btn btn-outline-light btn-lg"
-                href="#!"
-                role="button"
-              >
-                Get Started
-              </a>
+          <div
+            className="mask p-4"
+            style={{
+              backgroundColor: "rgba(0,0,0,0.5)",
+              position: "relative",
+              top: 260,
+            }}
+          >
+            <div className="d-flex justify-content-center align-items-center h-100">
+              <div className="text-white">
+                <h1 className="mb-3">Welcome to B-Vote</h1>
+                <h4 className="mb-3">
+                  A blockchain-based solution for secure and transparent voting.
+                </h4>
+                <a
+                  className="btn btn-outline-light btn-lg"
+                  href="#!"
+                  role="button"
+                >
+                  Get Started
+                </a>
+              </div>
             </div>
           </div>
         </div>
