@@ -8,7 +8,7 @@ const GetStarted = () => {
     {
       title: "Step 1: Create an Account",
       description:
-        "Sign up for an account to access the voting platform. Provide your basic information and create a secure password to get started.",
+        "Sign up for an account using near wallet to access the voting platform. Provide your basic information and create a secure password to get started.",
     },
     {
       title: "Step 2: Verify Your Identity",
@@ -32,7 +32,7 @@ const GetStarted = () => {
       <section id="get-started" className="py-5 bg-light">
         <Container>
           <h2 className="text-center text-primary mb-4">
-            Get Started with Secure Voting
+            Get Started with B-VOTE
           </h2>
           <p className="lead text-center">
             To get started with our secure voting platform, follow these simple
@@ -65,10 +65,13 @@ const GetStarted = () => {
                 </Row>
               )
           )}
-          {/* Center the button */}
           <Row className="mt-4 justify-content-center">
             <Col md={6}>
-              <Button variant="primary" className="btn-block">
+              <Button
+                variant="primary"
+                className="btn-block"
+                style={{ width: "600px" }}
+              >
                 Sign Up Now
               </Button>
             </Col>
