@@ -18,7 +18,13 @@ const Polls = (props) => {
 
   return (
     <Container>
-      <Table style={{ margin: "5vh" }} striped bordered hover>
+      <h2 className="text-center my-4">Polls</h2>
+      <p className="text-center">
+        Browse and access the list of available polls below. Click the "Go to
+        Poll" button to view the details of a specific poll.
+      </p>
+
+      <Table className="mb-4" striped bordered hover>
         <thead>
           <tr>
             <th>#</th>
@@ -49,19 +55,14 @@ const Polls = (props) => {
         </tbody>
       </Table>
       {promptList.length > 0 ? null : (
-        <Row className="justify-content-center d-flex">
-          <Card style={{ width: "20vw", height: "10vh" }}>
-            No Prompt to show
+        <Row className="justify-content-center my-4">
+          <Card className="text-center" style={{ width: "20rem" }}>
+            No Polls to Show
           </Card>
         </Row>
       )}
-      <Row>
-        <Button
-          style={{
-            width: "20vh",
-            marginLeft: "10vh",
-          }}
-        >
+      <Row className="justify-content-center">
+        <Button variant="danger" className="mb-4">
           Clear Polls
         </Button>
       </Row>
