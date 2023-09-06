@@ -55,7 +55,7 @@ export default function App({ isSignedIn, contractId, wallet }) {
     await localStorage.setItem("Candidate1", namePair[0]);
     await localStorage.setItem("Candidate2", namePair[1]);
     await localStorage.setItem("prompt", prompt);
-    window.location.replace(window.location.href + "polling-station");
+    window.location.replace("/polling-station");
   };
 
   const displayHome = () => {
