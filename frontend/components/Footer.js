@@ -34,12 +34,22 @@ const Footer = () => {
             <h5>Contact Us</h5>
             <address>
               <p>123 Main Street</p>
-              <p>City, Country</p>
-              <p>Email: info@example.com</p>
+              <p>Kandy, Sri Lanka</p>
+              <p>Email: info@bvote.com</p>
               <p>Phone: +1 123-456-7890</p>
             </address>
           </Col>
         </Row>
+        <hr className="bg-secondary" />
+        <div className="text-center">
+          <span className="text-center">
+            © 2023{" "}
+            <a href="/" className="hover:underline">
+              B-Vote
+            </a>
+            . All Rights Reserved.
+          </span>
+        </div>
       </Container>
     </footer>
   );

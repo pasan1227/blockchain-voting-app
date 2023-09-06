@@ -16,7 +16,10 @@ const NewsletterSection = () => {
   };
 
   return (
-    <section id="newsletter" className="py-5 bg-secondary text-white">
+    <section
+      id="newsletter"
+      className="p-5 bg-secondary text-white text-center"
+    >
       <Container>
         <h2 className="text-center">Subscribe to Our Newsletter</h2>
         <p className="text-center">
@@ -36,7 +39,7 @@ const NewsletterSection = () => {
                   required
                 />
               </Form.Group>
-              <Button type="submit" variant="primary" className="btn-block">
+              <Button type="submit" variant="primary" className="btn-block mt-3">
                 Subscribe
               </Button>
             </Form>
