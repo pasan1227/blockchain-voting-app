@@ -15,6 +15,7 @@ import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import GetStarted from "./pages/GetStarted";
 import AboutUs from "./pages/AboutUs";
+import ContactUs from "./pages/ContactUs";
 import Polls from "./pages/Polls";
 import NewPoll from "./pages/NewPoll";
 import PollingStation from "./pages/PollingStation";
@@ -64,6 +65,7 @@ export default function App({ isSignedIn, contractId, wallet }) {
           <Route path="/" element={<Home />} />
           <Route path="/get-started" element={<GetStarted />} />
           <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/contact-us" element={<ContactUs />} />
           <Route
             path="/polls"
             element={
