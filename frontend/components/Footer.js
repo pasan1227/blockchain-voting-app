@@ -9,8 +9,11 @@ const Footer = () => {
           <Col md={6}>
             <h5>About Us</h5>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-              eget lectus vel nunc congue porttitor.
+              B-VOTE is on a mission to transform the way elections are
+              conducted. We are committed to ensuring that every vote is secure,
+              transparent, and counts. Our goal is to provide a safe and
+              accessible platform for citizens to participate in the democratic
+              process.
             </p>
           </Col>
           <Col md={3}>
