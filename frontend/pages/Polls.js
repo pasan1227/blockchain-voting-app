@@ -29,7 +29,7 @@ const Polls = (props) => {
           <tr>
             <th>#</th>
             <th>List of Polls</th>
-            <th>Go to Poll</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -47,6 +47,8 @@ const Polls = (props) => {
                     >
                       Go to Poll
                     </Button>
+                    {"  "}
+                    <Button variant="danger">Share</Button>
                   </td>
                 </tr>
               );
@@ -61,11 +63,11 @@ const Polls = (props) => {
           </Card>
         </Row>
       )}
-      <Row className="justify-content-center">
+      {/* <Row className="justify-content-center">
         <Button variant="danger" className="mb-4">
           Clear Polls
         </Button>
-      </Row>
+      </Row> */}
     </Container>
   );
 };
