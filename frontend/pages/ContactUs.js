@@ -36,9 +36,23 @@ const ContactUs = () => {
         <Container>
           <h2 className="text-center text-primary mb-4">Contact Us</h2>
           <p className="text-center">
-            Have a question, suggestion, or just want to say hello? We'd love to
-            hear from you! Please fill out the form below, and we'll get back to
-            you as soon as possible.
+            Have questions, feedback, or need assistance? We're here to help!
+            Feel free to reach out to our dedicated support team using the
+            contact information below. Your inquiries are important to us, and
+            we'll do our best to provide you with a prompt and helpful response.
+          </p>
+
+          <div className="text-center mb-4">
+            <strong>Contact Information:</strong>
+            <br />
+            <span>Email: support@bvote.com</span>
+            <br />
+            <span>Phone: +1 (123) 456-7890</span>
+          </div>
+
+          <p className="text-center">
+            Alternatively, you can fill out the contact form provided on this
+            page, and we'll get back to you as soon as possible.
           </p>
           <Row className="justify-content-center">
             <Col md={8}>
@@ -74,12 +88,21 @@ const ContactUs = () => {
                     required
                   />
                 </Form.Group>
-                <Button className="mt-3" variant="primary" type="submit">
+                <Button
+                  className="mt-3"
+                  variant="primary"
+                  type="submit"
+                  style={{ width: "860px" }}
+                >
                   Submit
                 </Button>
               </Form>
             </Col>
           </Row>
+          <p className="text-center mt-4">
+            Thank you for choosing B-VOTE. We value your input and are committed
+            to delivering the best possible voting experience.
+          </p>
         </Container>
       </section>
       <Footer />
