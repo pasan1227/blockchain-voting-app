@@ -8,7 +8,7 @@ const HeroSection = () => {
           className="p-5 text-center img-fluid bg-image"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3572&q=80)",
+              "url(https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3572&q=80)",
             height: 800,
             backgroundSize: 1800,
             backgroundRepeat: "no-repeat",
