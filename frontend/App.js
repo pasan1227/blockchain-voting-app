@@ -8,7 +8,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import { Card, Button, Row } from "react-bootstrap";
+import { Card, Button, Row, Col } from "react-bootstrap";
 
 import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 
@@ -55,7 +55,7 @@ export default function App({ isSignedIn, contractId, wallet }) {
     await localStorage.setItem("Candidate1", namePair[0]);
     await localStorage.setItem("Candidate2", namePair[1]);
     await localStorage.setItem("prompt", prompt);
-    window.location.replace(window.location.href + "polling-station");
+    window.location.replace("/polling-station");
   };
 
   const displayHome = () => {
@@ -102,17 +102,28 @@ export default function App({ isSignedIn, contractId, wallet }) {
     } else {
       return (
         <Container>
-          <Row className="justify-content-center d-flex">
-            <Card style={{ padding: "10px", marginTop: "10vh", width: "30vh" }}>
-              <Container>
-                <Row className="justify-content-center">
-                  Hey there! Please Sign In
-                </Row>
-                <Row className="justify-content-center d-flex">
-                  <Button onClick={signInFunction}>Login</Button>
-                </Row>
-              </Container>
-            </Card>
+          <Row className="justify-content-center text-center p-5">
+            <Col lg={6} className="mt-5 p-5">
+              <Card>
+                <Card.Body>
+                  <Row className="justify-content-center">
+                    <h2>Welcome Back!</h2>
+                  </Row>
+                  <Row className="justify-content-center mt-2">
+                    <p>Sign in to your account to access B-VOTE.</p>
+                  </Row>
+                  <Row className="justify-content-center mt-3">
+                    <Button
+                      onClick={signInFunction}
+                      variant="primary"
+                      style={{ width: "240px" }}
+                    >
+                      Sign In
+                    </Button>
+                  </Row>
+                </Card.Body>
+              </Card>
+            </Col>
           </Row>
         </Container>
       );
@@ -131,14 +142,21 @@ export default function App({ isSignedIn, contractId, wallet }) {
           <Navbar.Brand href="/">B-VOTE</Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav className="me-auto"></Nav>
-            <Nav>
+            <Nav className="me-auto">
               <Nav.Link href="/">Home</Nav.Link>
               <Nav.Link href="/get-started">Get Started</Nav.Link>
               <Nav.Link href="/about-us">About Us</Nav.Link>
               <Nav.Link href="/contact-us">Contact Us</Nav.Link>
+            </Nav>
+            <Nav>
+              <Nav.Link disabled={!isSignedIn} href="/polls">
+                Polls
+              </Nav.Link>
               <Nav.Link disabled={!isSignedIn} href="/new-poll">
                 New Poll
+              </Nav.Link>
+              <Nav.Link disabled={!isSignedIn} href="/polling-station">
+                Polling Station
               </Nav.Link>
               <Nav.Link onClick={isSignedIn ? signOutFunction : signInFunction}>
                 {isSignedIn ? wallet.accountId : "Login"}

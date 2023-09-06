@@ -26,6 +26,10 @@ const PollingStation = (props) => {
         prompt: promptName,
       });
 
+      console.log(voteCount);
+      setCandidate1Votes(voteCount[0]);
+      setCandidate2Votes(voteCount[1]);
+
       setCandidate1URL(
         await props.viewMethod("getUrl", {
           prompt: localStorage.getItem("prompt"),
@@ -80,80 +84,80 @@ const PollingStation = (props) => {
 
   return (
     <>
-    <Container>
-      <Row className="justify-content-center my-5">
-        <Col lg={4}>
-          <div className="text-center">
-            <h2>Poll Prompt</h2>
-            <p>{prompt}</p>
-          </div>
-        </Col>
-      </Row>
-      <Row className="justify-content-center my-5">
-        <Col lg={4}>
-          <Card className="text-center">
-            <Card.Body>
-              <Card.Title>Candidate 1</Card.Title>
-              <Card.Text>
-                Vote for your favorite candidate by clicking the "Vote" button
-                below.
-              </Card.Text>
-              <img
-                src={candidate1URL}
-                alt="Candidate 1"
-                className="img-fluid rounded"
-              />
-              {showResults && (
-                <div className="mt-3">
-                  <h4>Total Votes</h4>
-                  <p>{candidate1Votes}</p>
-                </div>
-              )}
-              <Button
-                disabled={buttonStatus}
-                onClick={() => addVote(0)}
-                variant="primary"
-                className="mt-3"
-              >
-                Vote
-              </Button>
-            </Card.Body>
-          </Card>
-        </Col>
+      <Container>
+        <Row className="justify-content-center my-5">
+          <Col lg={4}>
+            <div className="text-center">
+              <h2>Poll Prompt</h2>
+              <p>{prompt}</p>
+            </div>
+          </Col>
+        </Row>
+        <Row className="justify-content-center my-5">
+          <Col lg={4}>
+            <Card className="text-center">
+              <Card.Body>
+                <Card.Title>Candidate 1</Card.Title>
+                <Card.Text>
+                  Vote for your favorite candidate by clicking the "Vote" button
+                  below.
+                </Card.Text>
+                <img
+                  src={candidate1URL}
+                  alt="Candidate 1"
+                  className="img-fluid rounded"
+                />
+                {showResults && (
+                  <div className="mt-3">
+                    <h4>Total Votes</h4>
+                    <p>{candidate1Votes}</p>
+                  </div>
+                )}
+                <Button
+                  disabled={buttonStatus}
+                  onClick={() => addVote(0)}
+                  variant="primary"
+                  className="mt-3"
+                >
+                  Vote
+                </Button>
+              </Card.Body>
+            </Card>
+          </Col>
 
-        <Col lg={4}>
-          <Card className="text-center">
-            <Card.Body>
-              <Card.Title>Candidate 2</Card.Title>
-              <Card.Text>
-                Vote for your favorite candidate by clicking the "Vote" button
-                below.
-              </Card.Text>
-              <img
-                src={candidate2URL}
-                alt="Candidate 2"
-                className="img-fluid rounded"
-              />
-              {showResults && (
-                <div className="mt-3">
-                  <h4>Total Votes</h4>
-                  <p>{candidate2Votes}</p>
-                </div>
-              )}
-              <Button
-                disabled={buttonStatus}
-                onClick={() => addVote(1)}
-                variant="primary"
-                className="mt-3"
-              >
-                Vote
-              </Button>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
-    <Footer />
+          <Col lg={4}>
+            <Card className="text-center">
+              <Card.Body>
+                <Card.Title>Candidate 2</Card.Title>
+                <Card.Text>
+                  Vote for your favorite candidate by clicking the "Vote" button
+                  below.
+                </Card.Text>
+                <img
+                  src={candidate2URL}
+                  alt="Candidate 2"
+                  className="img-fluid rounded"
+                />
+                {showResults && (
+                  <div className="mt-3">
+                    <h4>Total Votes</h4>
+                    <p>{candidate2Votes}</p>
+                  </div>
+                )}
+                <Button
+                  disabled={buttonStatus}
+                  onClick={() => addVote(1)}
+                  variant="primary"
+                  className="mt-3"
+                >
+                  Vote
+                </Button>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+      <Footer />
     </>
   );
 };
