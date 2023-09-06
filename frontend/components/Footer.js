@@ -20,16 +20,33 @@ const Footer = () => {
             <h5>Quick Links</h5>
             <ul className="list-unstyled">
               <li>
-                <a href="#">Home</a>
+                <a href="/" style={{ color: "white", textDecoration: "none" }}>
+                  Home
+                </a>
               </li>
               <li>
-                <a href="#">Features</a>
+                <a
+                  href="/get-started"
+                  style={{ color: "white", textDecoration: "none" }}
+                >
+                  Get Started
+                </a>
               </li>
               <li>
-                <a href="#">Newsletter</a>
+                <a
+                  href="/about-us"
+                  style={{ color: "white", textDecoration: "none" }}
+                >
+                  About Us
+                </a>
               </li>
               <li>
-                <a href="#">Contact</a>
+                <a
+                  href="/contact-us"
+                  style={{ color: "white", textDecoration: "none" }}
+                >
+                  Contact Us
+                </a>
               </li>
             </ul>
           </Col>
