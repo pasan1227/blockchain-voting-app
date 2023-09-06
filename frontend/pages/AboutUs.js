@@ -1,6 +1,5 @@
 import React from "react";
 import { Container, Row, Col, Image } from "react-bootstrap";
-
 import Footer from "../components/Footer";
 
 const AboutUs = () => {
@@ -15,24 +14,23 @@ const AboutUs = () => {
                 src="../assets/images/about-us.jpeg"
                 alt="About Us"
                 fluid
-                className="about-us-image"
               />
             </Col>
             <Col md={6}>
               <h3>Our Mission</h3>
               <p>
-                SecureVote is on a mission to transform the way elections are
-                conducted. We are committed to ensuring that every vote is
-                secure, transparent, and counts. Our goal is to provide a safe
-                and accessible platform for citizens to participate in the
-                democratic process.
+                We are dedicated to providing a secure and transparent voting
+                platform powered by blockchain technology. Our mission is to
+                ensure that every vote counts and is safeguarded against fraud.
+                With a commitment to integrity and innovation, we aim to
+                revolutionize the way elections are conducted, making the
+                process more accessible and trustworthy for all.
               </p>
               <h3>Our Team</h3>
               <p>
                 Our team consists of dedicated individuals with expertise in
-                blockchain technology, cybersecurity, and elections. Together,
-                we are working tirelessly to build a better future for
-                democracy.
+                blockchain technology, and elections. Together, we are working
+                tirelessly to build a better future for democracy.
               </p>
             </Col>
           </Row>
