@@ -29,7 +29,7 @@ const Polls = (props) => {
           <tr>
             <th>#</th>
             <th>List of Polls</th>
-            <th>Go to Poll</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -46,7 +46,8 @@ const Polls = (props) => {
                       }}
                     >
                       Go to Poll
-                    </Button>
+                    </Button>{" "}
+                    <Button variant="secondary">View Results</Button>
                   </td>
                 </tr>
               );
