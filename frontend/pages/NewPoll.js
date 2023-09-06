@@ -1,13 +1,13 @@
 import React, { useRef, useState } from "react";
 import { Container, Form, Button, Row, Col, Card } from "react-bootstrap";
 
+import Footer from "../components/Footer";
+
 const NewPoll = (props) => {
   const candidateName1 = useRef();
   const candidateName2 = useRef();
-
   const candidateName1URL = useRef();
   const candidateName2URL = useRef();
-
   const promptRef = useRef();
 
   const [disableButton, setDisableButton] = useState(false);
@@ -35,87 +35,103 @@ const NewPoll = (props) => {
   };
 
   return (
-    <Container style={{ marginTop: "10px" }}>
-      <Row>
-        <Card>
-          <Card.Body>
-            <Card.Title>Voting Prompt</Card.Title>
-            <Form>
-              <Form.Group className="mb-3">
-                <Form.Label>Prompt</Form.Label>
-                <Form.Control
-                  ref={promptRef}
-                  placeholder="Add Prompt"
-                ></Form.Control>
-              </Form.Group>
-            </Form>
-          </Card.Body>
-        </Card>
-      </Row>
-      <Row style={{ marginTop: "5vh" }}>
-        <Col className="justify-content-center d-flex">
-          <Card style={{ width: "18rem" }}>
-            <Card.Body>
-              <Card.Title>Candidate 1 Information</Card.Title>
-              <Card.Subtitle className="mb-2 text-muted">
-                Enter Your Information for your first candidate
-              </Card.Subtitle>
-              <Form.Group className="mb-3">
-                <Form.Label>Candidate 1 Name</Form.Label>
-                <Form.Control
-                  ref={candidateName1}
-                  placeholder="Enter Candidate Name"
-                ></Form.Control>
-              </Form.Group>
+    <>
+      <Container style={{ marginTop: "25px" }}>
+        <Row className="justify-content-center">
+          <Col lg={8}>
+            <p className="text-center">
+              Create a new poll by filling out the form below. Enter a poll
+              prompt, the names and image URLs of two candidates, and click the
+              "Create Poll" button.
+            </p>
+          </Col>
+        </Row>
 
-              <Form.Group className="mb-3">
-                <Form.Label>Candidate 1 Image URL</Form.Label>
-                <Form.Control
-                  ref={candidateName1URL}
-                  placeholder="Enter Candidate Image URL"
-                ></Form.Control>
-              </Form.Group>
-            </Card.Body>
-          </Card>
-        </Col>
+        <Row className="justify-content-center">
+          <Col lg={12}>
+            <Card>
+              <Card.Body>
+                <Card.Title className="text-center">
+                  Create a New Poll
+                </Card.Title>
+                <Form>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Poll Prompt</Form.Label>
+                    <Form.Control
+                      ref={promptRef}
+                      placeholder="Enter Poll Prompt"
+                    ></Form.Control>
+                  </Form.Group>
+                </Form>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
 
-        <Col className="justify-content-center d-flex">
-          <Card style={{ width: "18rem" }}>
-            <Card.Body>
-              <Card.Title>Candidate 2 Information</Card.Title>
-              <Card.Subtitle className="mb-2 text-muted">
-                Enter Your Information for your second candidate
-              </Card.Subtitle>
-              <Form.Group className="mb-3">
-                <Form.Label>Candidate 2 Name</Form.Label>
-                <Form.Control
-                  ref={candidateName2}
-                  placeholder="Enter Candidate Name"
-                ></Form.Control>
-              </Form.Group>
+        <Row style={{ marginTop: "3vh" }}>
+          <Col lg={6} className="mb-4">
+            <Card>
+              <Card.Body>
+                <Card.Title className="text-center">Candidate 1</Card.Title>
+                <Form>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Candidate Name</Form.Label>
+                    <Form.Control
+                      ref={candidateName1}
+                      placeholder="Enter Candidate Name"
+                    ></Form.Control>
+                  </Form.Group>
 
-              <Form.Group className="mb-3">
-                <Form.Label>Candidate 2 Image URL</Form.Label>
-                <Form.Control
-                  ref={candidateName2URL}
-                  placeholder="Enter Candidate Image URL"
-                ></Form.Control>
-              </Form.Group>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Image URL</Form.Label>
+                    <Form.Control
+                      ref={candidateName1URL}
+                      placeholder="Enter Image URL"
+                    ></Form.Control>
+                  </Form.Group>
+                </Form>
+              </Card.Body>
+            </Card>
+          </Col>
 
-      <Row style={{ marginTop: "10vh" }}>
-        <Button
-          disabled={disableButton}
-          onClick={sendToBlockchain}
-          variant="primary"
-        >
-          Submit
-        </Button>
-      </Row>
-    </Container>
+          <Col lg={6} className="mb-4">
+            <Card>
+              <Card.Body>
+                <Card.Title className="text-center">Candidate 2</Card.Title>
+                <Form>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Candidate Name</Form.Label>
+                    <Form.Control
+                      ref={candidateName2}
+                      placeholder="Enter Candidate Name"
+                    ></Form.Control>
+                  </Form.Group>
+
+                  <Form.Group className="mb-3">
+                    <Form.Label>Image URL</Form.Label>
+                    <Form.Control
+                      ref={candidateName2URL}
+                      placeholder="Enter Image URL"
+                    ></Form.Control>
+                  </Form.Group>
+                </Form>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+
+        <Row className="justify-content-center mb-5">
+          <Button
+            disabled={disableButton}
+            onClick={sendToBlockchain}
+            variant="primary"
+          >
+            Create Poll
+          </Button>
+        </Row>
+      </Container>
+      <Footer />
+    </>
   );
 };
 
