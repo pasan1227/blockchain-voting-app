@@ -1,9 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { Table, Container, Button, Row, Card } from "react-bootstrap";
+import { Table, Container, Button, Row, Card, Modal } from "react-bootstrap";
 
 const Polls = (props) => {
   const [disableButton, setDisableButton] = useState(false);
   const [promptList, setPromptList] = useState([]);
+
+  const [showModal, setShowModal] = useState(false);
+  const [selectedPollLink, setSelectedPollLink] = useState("");
+
+  const handleShareClick = (promptName) => {
+    // Generate the sharable link for the selected poll
+    const pollLink = `${
+      window.location.origin
+    }/polling-station?poll=${encodeURIComponent(promptName)}`;
+
+    // Set the link in the state
+    setSelectedPollLink(pollLink);
+
+    // Show the modal
+    setShowModal(true);
+  };
 
   useEffect(() => {
     const getInfo = async () => {
@@ -48,7 +64,14 @@ const Polls = (props) => {
                       Go to Poll
                     </Button>
                     {"  "}
-                    <Button variant="danger">Share</Button>
+                    <Button
+                      onClick={() => {
+                        handleShareClick(promptName);
+                      }}
+                      variant="danger"
+                    >
+                      Share
+                    </Button>
                   </td>
                 </tr>
               );
@@ -56,6 +79,27 @@ const Polls = (props) => {
           })}
         </tbody>
       </Table>
+
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Share Poll</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Share this link to the poll:</p>
+          <input
+            type="text"
+            readOnly
+            className="form-control"
+            value={selectedPollLink}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       {promptList.length > 0 ? null : (
         <Row className="justify-content-center my-4">
           <Card className="text-center" style={{ width: "20rem" }}>
