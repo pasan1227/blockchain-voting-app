@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col, Button, Card } from "react-bootstrap";
+
+import Footer from "../components/Footer";
 
 const PollingStation = (props) => {
   const [candidate1URL, setCandidate1URL] = useState(
@@ -70,7 +72,6 @@ const PollingStation = (props) => {
 
     setCandidate1Votes(voteCount[0]);
     setCandidate2Votes(voteCount[1]);
-    console.log(voteCount);
 
     alert("Thanks for voting!");
 
@@ -78,124 +79,82 @@ const PollingStation = (props) => {
   };
 
   return (
+    <>
     <Container>
-      <Row>
-        <Col
-          className="justify-content-center d-flex"
-          style={{ width: "20vw" }}
-        >
-          <Container>
-            <Row style={{ marginTop: "5vh", backgroundColor: "#c4c4c4" }}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  padding: "3vw",
-                }}
-              >
-                <img
-                  style={{ height: "35vh", width: "35vw" }}
-                  src={candidate1URL}
-                />
-              </div>
-            </Row>
-            {showResults ? (
-              <Row
-                className="justify-content-center d-flex"
-                style={{ marginTop: "5vh" }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    fontSize: "8vw",
-                    padding: "10px",
-                    backgroundColor: "#c4c4c4",
-                  }}
-                >
-                  {candidate1Votes}
-                </div>
-              </Row>
-            ) : null}
-            <Row
-              className="justify-content-center d-flex"
-              style={{ marginTop: "5vh" }}
-            >
-              <Button disabled={buttonStatus} onClick={() => addVote[0]}>
-                Vote
-              </Button>
-            </Row>
-          </Container>
-        </Col>
-
-        <Col
-          className="justify-content-center d-flex"
-          style={{ width: "10vw" }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              height: "20vh",
-              padding: "10==2vw",
-              backgroundColor: "#c4c4c4",
-              alignItems: "center",
-              textAlign: "center",
-              marginTop: "5vh",
-            }}
-          >
-            {prompt}
+      <Row className="justify-content-center my-5">
+        <Col lg={4}>
+          <div className="text-center">
+            <h2>Poll Prompt</h2>
+            <p>{prompt}</p>
           </div>
         </Col>
-        <Col
-          className="justify-content-center d-flex"
-          style={{ width: "20vw" }}
-        >
-          <Container>
-            <Row style={{ marginTop: "5vh", backgroundColor: "#c4c4c4" }}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  padding: "3vw",
-                }}
-              >
-                <img
-                  style={{ height: "35vh", width: "35vw" }}
-                  src={candidate2URL}
-                />
-              </div>
-            </Row>
-            {showResults ? (
-              <Row
-                className="justify-content-center d-flex"
-                style={{ marginTop: "5vh" }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    fontSize: "8vw",
-                    padding: "10px",
-                    backgroundColor: "#c4c4c4",
-                  }}
-                >
-                  {candidate2Votes}
+      </Row>
+      <Row className="justify-content-center my-5">
+        <Col lg={4}>
+          <Card className="text-center">
+            <Card.Body>
+              <Card.Title>Candidate 1</Card.Title>
+              <Card.Text>
+                Vote for your favorite candidate by clicking the "Vote" button
+                below.
+              </Card.Text>
+              <img
+                src={candidate1URL}
+                alt="Candidate 1"
+                className="img-fluid rounded"
+              />
+              {showResults && (
+                <div className="mt-3">
+                  <h4>Total Votes</h4>
+                  <p>{candidate1Votes}</p>
                 </div>
-              </Row>
-            ) : null}
-            <Row
-              className="justify-content-center d-flex"
-              style={{ marginTop: "5vh" }}
-            >
-              <Button disabled={buttonStatus} onClick={() => addVote[1]}>
+              )}
+              <Button
+                disabled={buttonStatus}
+                onClick={() => addVote(0)}
+                variant="primary"
+                className="mt-3"
+              >
                 Vote
               </Button>
-            </Row>
-          </Container>
+            </Card.Body>
+          </Card>
+        </Col>
+
+        <Col lg={4}>
+          <Card className="text-center">
+            <Card.Body>
+              <Card.Title>Candidate 2</Card.Title>
+              <Card.Text>
+                Vote for your favorite candidate by clicking the "Vote" button
+                below.
+              </Card.Text>
+              <img
+                src={candidate2URL}
+                alt="Candidate 2"
+                className="img-fluid rounded"
+              />
+              {showResults && (
+                <div className="mt-3">
+                  <h4>Total Votes</h4>
+                  <p>{candidate2Votes}</p>
+                </div>
+              )}
+              <Button
+                disabled={buttonStatus}
+                onClick={() => addVote(1)}
+                variant="primary"
+                className="mt-3"
+              >
+                Vote
+              </Button>
+            </Card.Body>
+          </Card>
         </Col>
       </Row>
     </Container>
+    <Footer />
+    </>
   );
 };
 
