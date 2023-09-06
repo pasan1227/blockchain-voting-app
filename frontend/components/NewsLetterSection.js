@@ -10,9 +10,7 @@ const NewsletterSection = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Send the email to your newsletter subscription service or backend here.
     console.log(`Subscribed with email: ${email}`);
-    // You can add further logic to send the email to your newsletter service.
   };
 
   return (
@@ -30,7 +28,7 @@ const NewsletterSection = () => {
           <Col md={6}>
             <Form onSubmit={handleSubmit}>
               <Form.Group controlId="formEmail">
-                <Form.Label>Email Address</Form.Label>
+                {/* <Form.Label>Email Address</Form.Label> */}
                 <Form.Control
                   type="email"
                   placeholder="Enter your email"
