@@ -53,7 +53,7 @@ const FeatureSection = () => {
   return (
     <section id="features" className="p-5 bg-light">
       <Container>
-        <h2 className="text-center mb-4">Key Features</h2>
+        <h2 className="text-center mb-4">Why Choose B-Vote?</h2>
         <Row>
           {features.map((feature, index) => (
             <Col className="p-2" key={index} md={4}>

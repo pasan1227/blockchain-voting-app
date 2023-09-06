@@ -30,7 +30,7 @@ const HeroSection = () => {
                 </h4>
                 <a
                   className="btn btn-outline-light btn-lg"
-                  href="#!"
+                  href="/get-started"
                   role="button"
                 >
                   Get Started

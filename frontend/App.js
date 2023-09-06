@@ -149,11 +149,11 @@ export default function App({ isSignedIn, contractId, wallet }) {
               <Nav.Link href="/contact-us">Contact Us</Nav.Link>
             </Nav>
             <Nav>
-              <Nav.Link disabled={!isSignedIn} href="/polls">
-                Polls
-              </Nav.Link>
               <Nav.Link disabled={!isSignedIn} href="/new-poll">
                 New Poll
+              </Nav.Link>
+              <Nav.Link disabled={!isSignedIn} href="/polls">
+                Polls
               </Nav.Link>
               <Nav.Link disabled={!isSignedIn} href="/polling-station">
                 Polling Station
