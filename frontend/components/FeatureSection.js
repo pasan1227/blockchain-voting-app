@@ -14,39 +14,39 @@ const FeatureSection = () => {
   const features = [
     {
       icon: faShieldAlt,
-      title: "Blockchain Security",
+      title: "Secure & Trustworthy",
       description:
-        "Utilizes blockchain technology to provide a highly secure and tamper-proof voting process, ensuring the integrity of the election results.",
+        "Our blockchain-based system ensures the highest level of security and trust in the voting process.",
     },
     {
       icon: faUserCheck,
-      title: "User Verification",
+      title: "Verified Voters",
       description:
-        "Verifies the identity of eligible voters through multi-factor authentication, ensuring that only authorized individuals can cast their votes.",
+        "We use multi-factor authentication to verify the identity of eligible voters, ensuring a fair election.",
     },
     {
       icon: faPoll,
-      title: "Transparency",
+      title: "Transparent Voting",
       description:
-        "Offers complete transparency in the voting process, allowing voters and observers to independently verify the authenticity of each vote.",
+        "Our platform provides complete transparency, allowing voters to verify the authenticity of each vote.",
     },
     {
       icon: faClock,
       title: "Real-time Updates",
       description:
-        "Provides real-time updates on the voting progress and results, giving stakeholders immediate access to election data.",
+        "Stay informed with real-time updates on voting progress and results.",
     },
     {
       icon: faUsers,
-      title: "Scalability",
+      title: "Scalable Solutions",
       description:
-        "Scales effortlessly to accommodate elections of any size, from small local elections to large national or international ones.",
+        "Our system scales effortlessly to accommodate elections of any size, from local to national.",
     },
     {
       icon: faLock,
-      title: "Privacy",
+      title: "Privacy Protection",
       description:
-        "Ensures voter privacy by encrypting and securely storing personal information, making it inaccessible to unauthorized parties.",
+        "We prioritize voter privacy by encrypting and securely storing personal information.",
     },
   ];
 
@@ -59,7 +59,10 @@ const FeatureSection = () => {
             <Col className="p-2" key={index} md={4}>
               <Card className="text-center h-100">
                 <Card.Body className="p-4">
-                  <FontAwesomeIcon icon={feature.icon} className="fa-3x mb-2" />
+                  <FontAwesomeIcon
+                    icon={feature.icon}
+                    className="fa-3x mb-2 text-primary"
+                  />
                   <Card.Title>{feature.title}</Card.Title>
                   <Card.Text>{feature.description}</Card.Text>
                 </Card.Body>
