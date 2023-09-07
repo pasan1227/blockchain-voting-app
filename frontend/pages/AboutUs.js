@@ -1,13 +1,15 @@
 import React from "react";
-import { Container, Row, Col, Image } from "react-bootstrap";
+import { Container, Row, Col, Card, Image } from "react-bootstrap";
 import Footer from "../components/Footer";
+
+import "../styles/AboutUs.css";
 
 const AboutUs = () => {
   return (
     <>
       <section id="about-us" className="py-5 bg-light">
         <Container>
-          <h2 className="text-center text-primary mb-4">About B-VOTE</h2>
+          <h2 className="text-center mb-4">About B-VOTE</h2>
           <Row className="mb-4">
             <Col md={6}>
               <Image
@@ -29,7 +31,7 @@ const AboutUs = () => {
               <h3>Our Team</h3>
               <p>
                 Our team consists of dedicated individuals with expertise in
-                blockchain technology, and elections. Together, we are working
+                blockchain technology and elections. Together, we are working
                 tirelessly to build a better future for democracy.
               </p>
             </Col>
@@ -37,25 +39,52 @@ const AboutUs = () => {
           <Row>
             <Col>
               <h3>Our Values</h3>
-              <ul className="values-list">
-                <li>
-                  <strong>Integrity:</strong> We uphold the highest standards of
-                  integrity in all our operations.
-                </li>
-                <li>
-                  <strong>Transparency:</strong> We believe in complete
-                  transparency to build trust among our users and stakeholders.
-                </li>
-                <li>
-                  <strong>Innovation:</strong> We continuously innovate to stay
-                  at the forefront of secure voting technology.
-                </li>
-                <li>
-                  <strong>Accessibility:</strong> We strive to make our voting
-                  platform accessible to all, ensuring that no one is left
-                  behind.
-                </li>
-              </ul>
+              <Row>
+                <Col md={6} className="mb-3">
+                  <Card className="h-100 about-us-card">
+                    <Card.Body>
+                      <Card.Title>Integrity</Card.Title>
+                      <Card.Text>
+                        We uphold the highest standards of integrity in all our
+                        operations.
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                </Col>
+                <Col md={6} className="mb-3">
+                  <Card className="h-100 about-us-card">
+                    <Card.Body>
+                      <Card.Title>Transparency</Card.Title>
+                      <Card.Text>
+                        We believe in complete transparency to build trust among
+                        our users and stakeholders.
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                </Col>
+                <Col md={6} className="mb-3">
+                  <Card className="h-100 about-us-card">
+                    <Card.Body>
+                      <Card.Title>Innovation</Card.Title>
+                      <Card.Text>
+                        We continuously innovate to stay at the forefront of
+                        secure voting technology.
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                </Col>
+                <Col md={6} className="mb-3">
+                  <Card className="h-100 about-us-card">
+                    <Card.Body>
+                      <Card.Title>Accessibility</Card.Title>
+                      <Card.Text>
+                        We strive to make our voting platform accessible to all,
+                        ensuring that no one is left behind.
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              </Row>
             </Col>
           </Row>
         </Container>

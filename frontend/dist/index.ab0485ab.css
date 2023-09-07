@@ -13322,6 +13322,24 @@ textarea.form-control-lg {
   }
 }
 
+.feature-card:hover {
+  transition: transform 5s cubic-bezier(.25, .25, .25, .25);
+  transform: scale(1.1);
+  box-shadow: 0 4px 6px #0003;
+}
+
+.get-started-card:hover {
+  transition: all .3s ease-in-out;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px #0000001a;
+}
+
+.about-us-card:hover {
+  transition: all .3s ease-in-out;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px #0000001a;
+}
+
 #near-wallet-selector-modal {
   --backdrop-bg: #26262630;
   --heading-color: #222;

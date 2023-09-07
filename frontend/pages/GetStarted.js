@@ -3,27 +3,39 @@ import { Container, Row, Col, Button, Card } from "react-bootstrap";
 
 import Footer from "../components/Footer";
 
+import "../styles/GetStarted.css";
+
 const GetStarted = () => {
   const steps = [
     {
-      title: "Step 1: Create an Account",
+      title: "Step 1: Registration",
       description:
-        "Sign up for an account using near wallet to access the voting platform. Provide your basic information and create a secure password to get started.",
+        "Users register on the platform using their verified credentials, ensuring their eligibility to participate in elections.",
     },
     {
-      title: "Step 2: Verify Your Identity",
+      title: "Step 2: Browse Elections",
       description:
-        "Complete the identity verification process. We take privacy and security seriously, and this step ensures the integrity of the voting process.",
+        "Browse and view a list of upcoming elections and their details, including candidates and voting dates.",
     },
     {
-      title: "Step 3: Explore Features",
+      title: "Step 3: Cast Your Vote",
       description:
-        "Familiarize yourself with the features of our secure voting system. You can review upcoming elections, candidates, and more.",
+        "Select your preferred candidate, review your choice, and securely cast your vote using blockchain technology.",
     },
     {
-      title: "Step 4: Vote Securely",
+      title: "Step 4: Transparency",
       description:
-        "Cast your vote in upcoming elections with confidence. Our blockchain-based technology ensures that your vote is secure and anonymous.",
+        "The voting process is transparent and tamper-proof, ensuring the integrity of the election results.",
+    },
+    {
+      title: "Step 5: Real-time Updates",
+      description:
+        "Get real-time updates on the progress of the election and the vote count as it happens.",
+    },
+    {
+      title: "Step 6: Election Results",
+      description:
+        "Once the election concludes, access the official results and verify the outcome independently.",
     },
   ];
 
@@ -31,9 +43,7 @@ const GetStarted = () => {
     <>
       <section id="get-started" className="py-5 bg-light">
         <Container>
-          <h2 className="text-center text-primary mb-4">
-            Get Started with B-VOTE
-          </h2>
+          <h2 className="text-center mb-4">Get Started with B-VOTE</h2>
           <p className="lead text-center">
             To get started with our secure voting platform, follow these simple
             steps. Your voice matters, and we're here to ensure your vote is
@@ -43,9 +53,9 @@ const GetStarted = () => {
             (step, index) =>
               // Display two cards in each row
               index % 2 === 0 && (
-                <Row key={index} className="mb-4">
-                  <Col md={6} className="mb-4">
-                    <Card>
+                <Row key={index} className="mb-3">
+                  <Col md={6} className="mb-3">
+                    <Card className="get-started-card">
                       <Card.Body>
                         <Card.Title>{step.title}</Card.Title>
                         <Card.Text>{step.description}</Card.Text>
@@ -54,7 +64,7 @@ const GetStarted = () => {
                   </Col>
                   {index + 1 < steps.length && (
                     <Col md={6}>
-                      <Card>
+                      <Card className="get-started-card">
                         <Card.Body>
                           <Card.Title>{steps[index + 1].title}</Card.Title>
                           <Card.Text>{steps[index + 1].description}</Card.Text>
@@ -66,11 +76,11 @@ const GetStarted = () => {
               )
           )}
           <Row className="mt-4 justify-content-center">
-            <Col md={6}>
+            <Col md={5}>
               <Button
                 variant="primary"
                 className="btn-block"
-                style={{ width: "600px" }}
+                style={{ width: "515px" }}
               >
                 Sign Up Now
               </Button>
