@@ -1,5 +1,6 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
+import "../styles/Footer.css";
 
 const Footer = () => {
   return (
@@ -20,31 +21,22 @@ const Footer = () => {
             <h5>Quick Links</h5>
             <ul className="list-unstyled">
               <li>
-                <a href="/" style={{ color: "white", textDecoration: "none" }}>
+                <a href="/" className="text-white link">
                   Home
                 </a>
               </li>
               <li>
-                <a
-                  href="/get-started"
-                  style={{ color: "white", textDecoration: "none" }}
-                >
+                <a href="/get-started" className="text-white link">
                   Get Started
                 </a>
               </li>
               <li>
-                <a
-                  href="/about-us"
-                  style={{ color: "white", textDecoration: "none" }}
-                >
+                <a href="/about-us" className="text-white link">
                   About Us
                 </a>
               </li>
               <li>
-                <a
-                  href="/contact-us"
-                  style={{ color: "white", textDecoration: "none" }}
-                >
+                <a href="/contact-us" className="text-white link">
                   Contact Us
                 </a>
               </li>
@@ -64,7 +56,7 @@ const Footer = () => {
         <div className="text-center">
           <span className="text-center">
             © 2023{" "}
-            <a href="/" className="hover:underline">
+            <a href="/" className="text-white link">
               B-Vote
             </a>
             . All Rights Reserved.

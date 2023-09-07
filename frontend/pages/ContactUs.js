@@ -90,7 +90,7 @@ const ContactUs = () => {
                   className="mt-3"
                   variant="primary"
                   type="submit"
-                  style={{ width: "860px" }}
+                  style={{ width: "100%" }}
                 >
                   Submit
                 </Button>
