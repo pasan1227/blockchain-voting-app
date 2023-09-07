@@ -61,7 +61,7 @@ const FeatureSection = () => {
                 <Card.Body className="p-4">
                   <FontAwesomeIcon
                     icon={feature.icon}
-                    className="fa-3x mb-2 text-primary"
+                    className="fa-3x mb-3"
                   />
                   <Card.Title>{feature.title}</Card.Title>
                   <Card.Text>{feature.description}</Card.Text>
