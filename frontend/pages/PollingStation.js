@@ -127,7 +127,7 @@ const PollingStation = (props) => {
                   onClick={() => addVote(0)}
                   variant="primary"
                   className="mt-3"
-                  style={{ width: "300px" }}
+                  style={{ width: "100%" }}
                 >
                   Vote
                 </Button>
@@ -159,7 +159,7 @@ const PollingStation = (props) => {
                   onClick={() => addVote(1)}
                   variant="primary"
                   className="mt-3"
-                  style={{ width: "300px" }}
+                  style={{ width: "100%" }}
                 >
                   Vote
                 </Button>

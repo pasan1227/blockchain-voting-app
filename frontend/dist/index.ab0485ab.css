@@ -13328,6 +13328,14 @@ textarea.form-control-lg {
   box-shadow: 0 4px 6px #0003;
 }
 
+.text-white.link {
+  text-decoration: none;
+}
+
+.text-white.link:hover {
+  text-decoration: underline;
+}
+
 .get-started-card:hover {
   transition: all .3s ease-in-out;
   transform: translateY(-2px);

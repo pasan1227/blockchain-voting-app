@@ -80,7 +80,7 @@ const GetStarted = () => {
               <Button
                 variant="primary"
                 className="btn-block"
-                style={{ width: "515px" }}
+                style={{ width: "100%" }}
               >
                 Sign Up Now
               </Button>
