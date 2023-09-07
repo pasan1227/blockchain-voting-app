@@ -7,10 +7,12 @@ const PollingStation = (props) => {
   const [candidate1URL, setCandidate1URL] = useState(
     "https://cdn3.iconfinder.com/data/icons/iconpark-vol-9/48/loading-one-1024.png"
   );
-
   const [candidate2URL, setCandidate2URL] = useState(
     "https://cdn3.iconfinder.com/data/icons/iconpark-vol-9/48/loading-one-1024.png"
   );
+
+  const [candidate1Name, setCandidate1Name] = useState("");
+  const [candidate2Name, setCandidate2Name] = useState("");
 
   const [showResults, setShowResults] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(false);
@@ -29,6 +31,13 @@ const PollingStation = (props) => {
       console.log(voteCount);
       setCandidate1Votes(voteCount[0]);
       setCandidate2Votes(voteCount[1]);
+
+      const candidateNames = await props.viewMethod("getCandidatePair", {
+        prompt: localStorage.getItem("prompt"),
+      });
+
+      setCandidate1Name(candidateNames[0]);
+      setCandidate2Name(candidateNames[1]);
 
       setCandidate1URL(
         await props.viewMethod("getUrl", {
@@ -97,7 +106,7 @@ const PollingStation = (props) => {
           <Col lg={4}>
             <Card className="text-center">
               <Card.Body>
-                <Card.Title>Candidate 1</Card.Title>
+                <Card.Title>Candidate 1: {candidate1Name}</Card.Title>
                 <Card.Text>
                   Vote for your favorite candidate by clicking the "Vote" button
                   below.
@@ -129,7 +138,7 @@ const PollingStation = (props) => {
           <Col lg={4}>
             <Card className="text-center">
               <Card.Body>
-                <Card.Title>Candidate 2</Card.Title>
+                <Card.Title>Candidate 2: {candidate2Name}</Card.Title>
                 <Card.Text>
                   Vote for your favorite candidate by clicking the "Vote" button
                   below.
