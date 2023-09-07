@@ -155,9 +155,9 @@ export default function App({ isSignedIn, contractId, wallet }) {
               <Nav.Link disabled={!isSignedIn} href="/polls">
                 Polls
               </Nav.Link>
-              <Nav.Link disabled={!isSignedIn} href="/polling-station">
+              {/* <Nav.Link disabled={!isSignedIn} href="/polling-station">
                 Polling Station
-              </Nav.Link>
+              </Nav.Link> */}
               <Nav.Link onClick={isSignedIn ? signOutFunction : signInFunction}>
                 {isSignedIn ? wallet.accountId : "Login"}
               </Nav.Link>
