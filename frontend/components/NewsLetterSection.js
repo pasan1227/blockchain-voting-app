@@ -37,7 +37,12 @@ const NewsletterSection = () => {
                   required
                 />
               </Form.Group>
-              <Button type="submit" variant="primary" className="btn-block mt-3">
+              <Button
+                type="submit"
+                variant="primary"
+                className="btn-block mt-3"
+                style={{ width: "180px" }}
+              >
                 Subscribe
               </Button>
             </Form>

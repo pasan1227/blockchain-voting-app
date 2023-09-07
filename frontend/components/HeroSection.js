@@ -9,17 +9,18 @@ const HeroSection = () => {
           style={{
             backgroundImage:
               "url(https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3572&q=80)",
-            height: 800,
-            backgroundSize: 1800,
+            height: "800px",
+            backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
           }}
         >
           <div
             className="mask p-4"
             style={{
-              backgroundColor: "rgba(0,0,0,0.5)",
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
               position: "relative",
-              top: 260,
+              top: "50%",
+              transform: "translateY(-50%)",
             }}
           >
             <div className="d-flex justify-content-center align-items-center h-100">
