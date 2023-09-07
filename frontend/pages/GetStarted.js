@@ -31,7 +31,7 @@ const GetStarted = () => {
     <>
       <section id="get-started" className="py-5 bg-light">
         <Container>
-          <h2 className="text-center text-primary mb-4">
+          <h2 className="text-center mb-4">
             Get Started with B-VOTE
           </h2>
           <p className="lead text-center">

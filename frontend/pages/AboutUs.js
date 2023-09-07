@@ -7,7 +7,7 @@ const AboutUs = () => {
     <>
       <section id="about-us" className="py-5 bg-light">
         <Container>
-          <h2 className="text-center text-primary mb-4">About B-VOTE</h2>
+          <h2 className="text-center mb-4">About B-VOTE</h2>
           <Row className="mb-4">
             <Col md={6}>
               <Image

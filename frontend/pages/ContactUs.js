@@ -20,9 +20,7 @@ const ContactUs = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission here (e.g., send an email or save to a database)
     console.log("Form Data:", formData);
-    // Reset the form fields
     setFormData({
       name: "",
       email: "",
@@ -34,7 +32,7 @@ const ContactUs = () => {
     <>
       <section id="contact-us" className="py-5 bg-light">
         <Container>
-          <h2 className="text-center text-primary mb-4">Contact Us</h2>
+          <h2 className="text-center mb-4">Contact Us</h2>
           <p className="text-center">
             Have questions, feedback, or need assistance? We're here to help!
             Feel free to reach out to our dedicated support team using the
