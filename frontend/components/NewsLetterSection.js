@@ -14,10 +14,7 @@ const NewsletterSection = () => {
   };
 
   return (
-    <section
-      id="newsletter"
-      className="p-5 bg-secondary text-white text-center"
-    >
+    <section id="newsletter" className="p-5 bg-black text-white text-center">
       <Container>
         <h2 className="text-center">Subscribe to Our Newsletter</h2>
         <p className="text-center">
@@ -39,8 +36,8 @@ const NewsletterSection = () => {
               </Form.Group>
               <Button
                 type="submit"
-                variant="primary"
-                className="btn-block mt-3"
+                variant="dark"
+                className="btn btn-outline-light btn-lg mt-3"
                 style={{ width: "180px" }}
               >
                 Subscribe

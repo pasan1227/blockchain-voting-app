@@ -10,6 +10,8 @@ import {
   faLock,
 } from "@fortawesome/free-solid-svg-icons";
 
+import "../styles/FeatureSection.css";
+
 const FeatureSection = () => {
   const features = [
     {
@@ -57,12 +59,9 @@ const FeatureSection = () => {
         <Row>
           {features.map((feature, index) => (
             <Col className="p-2" key={index} md={4}>
-              <Card className="text-center h-100">
+              <Card className="text-center h-100 feature-card">
                 <Card.Body className="p-4">
-                  <FontAwesomeIcon
-                    icon={feature.icon}
-                    className="fa-3x mb-3"
-                  />
+                  <FontAwesomeIcon icon={feature.icon} className="fa-3x mb-3" />
                   <Card.Title>{feature.title}</Card.Title>
                   <Card.Text>{feature.description}</Card.Text>
                 </Card.Body>

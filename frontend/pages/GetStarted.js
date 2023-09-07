@@ -3,6 +3,8 @@ import { Container, Row, Col, Button, Card } from "react-bootstrap";
 
 import Footer from "../components/Footer";
 
+import "../styles/GetStarted.css";
+
 const GetStarted = () => {
   const steps = [
     {
@@ -53,7 +55,7 @@ const GetStarted = () => {
               index % 2 === 0 && (
                 <Row key={index} className="mb-3">
                   <Col md={6} className="mb-3">
-                    <Card>
+                    <Card className="get-started-card">
                       <Card.Body>
                         <Card.Title>{step.title}</Card.Title>
                         <Card.Text>{step.description}</Card.Text>
@@ -62,7 +64,7 @@ const GetStarted = () => {
                   </Col>
                   {index + 1 < steps.length && (
                     <Col md={6}>
-                      <Card>
+                      <Card className="get-started-card">
                         <Card.Body>
                           <Card.Title>{steps[index + 1].title}</Card.Title>
                           <Card.Text>{steps[index + 1].description}</Card.Text>

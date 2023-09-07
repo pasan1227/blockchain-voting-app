@@ -3,7 +3,7 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 
 const CallToActionSection = () => {
   return (
-    <section id="cta" className="py-5 bg- text-">
+    <section id="cta" className="py-5 text-">
       <Container>
         <Row className="align-items-center">
           <Col lg={6}>

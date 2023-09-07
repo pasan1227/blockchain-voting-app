@@ -2,6 +2,8 @@ import React from "react";
 import { Container, Row, Col, Card, Image } from "react-bootstrap";
 import Footer from "../components/Footer";
 
+import "../styles/AboutUs.css";
+
 const AboutUs = () => {
   return (
     <>
@@ -39,7 +41,7 @@ const AboutUs = () => {
               <h3>Our Values</h3>
               <Row>
                 <Col md={6} className="mb-3">
-                  <Card className="h-100">
+                  <Card className="h-100 about-us-card">
                     <Card.Body>
                       <Card.Title>Integrity</Card.Title>
                       <Card.Text>
@@ -50,7 +52,7 @@ const AboutUs = () => {
                   </Card>
                 </Col>
                 <Col md={6} className="mb-3">
-                  <Card className="h-100">
+                  <Card className="h-100 about-us-card">
                     <Card.Body>
                       <Card.Title>Transparency</Card.Title>
                       <Card.Text>
@@ -61,7 +63,7 @@ const AboutUs = () => {
                   </Card>
                 </Col>
                 <Col md={6} className="mb-3">
-                  <Card className="h-100">
+                  <Card className="h-100 about-us-card">
                     <Card.Body>
                       <Card.Title>Innovation</Card.Title>
                       <Card.Text>
@@ -72,7 +74,7 @@ const AboutUs = () => {
                   </Card>
                 </Col>
                 <Col md={6} className="mb-3">
-                  <Card className="h-100">
+                  <Card className="h-100 about-us-card">
                     <Card.Body>
                       <Card.Title>Accessibility</Card.Title>
                       <Card.Text>
