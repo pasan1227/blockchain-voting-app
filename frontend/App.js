@@ -136,7 +136,7 @@ export default function App({ isSignedIn, contractId, wallet }) {
         className="navbar navbar-dark"
         collapseOnSelect
         expand="lg"
-        style={{ backgroundColor: "black" }}
+        style={{ backgroundColor: "black", fontSize: "17px" }}
       >
         <Container>
           <Navbar.Brand href="/">B-VOTE</Navbar.Brand>
