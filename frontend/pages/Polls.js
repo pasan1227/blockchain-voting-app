@@ -7,6 +7,7 @@ const Polls = (props) => {
 
   const [showModal, setShowModal] = useState(false);
   const [selectedPollLink, setSelectedPollLink] = useState("");
+  const [copyLinkSuccess, setCopyLinkSuccess] = useState(false);
 
   const handleShareClick = (promptName) => {
     // Generate the sharable link for the selected poll
@@ -19,6 +20,18 @@ const Polls = (props) => {
 
     // Show the modal
     setShowModal(true);
+
+    // Reset copy link success status
+    setCopyLinkSuccess(false);
+  };
+
+  const handleCopyLink = () => {
+    const inputLink = document.getElementById("pollLinkInput");
+
+    inputLink.select();
+    document.execCommand("copy");
+
+    setCopyLinkSuccess(true);
   };
 
   useEffect(() => {
@@ -87,15 +100,24 @@ const Polls = (props) => {
         <Modal.Body>
           <p>Share this link to the poll:</p>
           <input
+            id="pollLinkInput"
             type="text"
             readOnly
             className="form-control"
             value={selectedPollLink}
           />
+          {copyLinkSuccess ? (
+            <div className="alert alert-success mt-3">
+              Link copied to clipboard!
+            </div>
+          ) : null}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowModal(false)}>
             Close
+          </Button>
+          <Button variant="primary" onClick={handleCopyLink}>
+            Copy Link
           </Button>
         </Modal.Footer>
       </Modal>
@@ -107,11 +129,6 @@ const Polls = (props) => {
           </Card>
         </Row>
       )}
-      {/* <Row className="justify-content-center">
-        <Button variant="danger" className="mb-4">
-          Clear Polls
-        </Button>
-      </Row> */}
     </Container>
   );
 };
