@@ -10,8 +10,23 @@ const NewPoll = (props) => {
   const candidateName2URL = useRef();
   const promptRef = useRef();
 
-  const [disableButton, setDisableButton] = useState(false);
+  const [disableButton, setDisableButton] = useState(true); // Initialize as disabled
   const [displayMessage, setDisplayMessage] = useState(false);
+
+  const validateFields = () => {
+    // Check if any of the fields are empty
+    if (
+      !promptRef.current.value ||
+      !candidateName1.current.value ||
+      !candidateName2.current.value ||
+      !candidateName1URL.current.value ||
+      !candidateName2URL.current.value
+    ) {
+      setDisableButton(true); // Disable the button if any field is empty
+    } else {
+      setDisableButton(false); // Enable the button if all fields are filled
+    }
+  };
 
   const sendToBlockchain = async () => {
     setDisableButton(true);
@@ -60,6 +75,7 @@ const NewPoll = (props) => {
                     <Form.Control
                       ref={promptRef}
                       placeholder="Enter Poll Prompt"
+                      onChange={validateFields}
                     ></Form.Control>
                   </Form.Group>
                 </Form>
@@ -79,6 +95,7 @@ const NewPoll = (props) => {
                     <Form.Control
                       ref={candidateName1}
                       placeholder="Enter Candidate Name"
+                      onChange={validateFields}
                     ></Form.Control>
                   </Form.Group>
 
@@ -87,6 +104,7 @@ const NewPoll = (props) => {
                     <Form.Control
                       ref={candidateName1URL}
                       placeholder="Enter Image URL"
+                      onChange={validateFields}
                     ></Form.Control>
                   </Form.Group>
                 </Form>
@@ -104,6 +122,7 @@ const NewPoll = (props) => {
                     <Form.Control
                       ref={candidateName2}
                       placeholder="Enter Candidate Name"
+                      onChange={validateFields}
                     ></Form.Control>
                   </Form.Group>
 
@@ -112,6 +131,7 @@ const NewPoll = (props) => {
                     <Form.Control
                       ref={candidateName2URL}
                       placeholder="Enter Image URL"
+                      onChange={validateFields}
                     ></Form.Control>
                   </Form.Group>
                 </Form>
