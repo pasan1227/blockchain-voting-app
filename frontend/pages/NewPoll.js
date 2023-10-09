@@ -1,5 +1,8 @@
 import React, { useRef, useState } from "react";
 import { Container, Form, Button, Row, Col, Card } from "react-bootstrap";
+import DatePicker from "react-datepicker"; // Import the DatePicker component
+import "react-datepicker/dist/react-datepicker.css"; // Import the DatePicker styles
+import { Link } from "react-router-dom"; // Import React Router Link
 
 import Footer from "../components/Footer";
 
@@ -9,6 +12,9 @@ const NewPoll = (props) => {
   const candidateName1URL = useRef();
   const candidateName2URL = useRef();
   const promptRef = useRef();
+
+  // State for storing the selected deadline date
+  const [deadlineDate, setDeadlineDate] = useState(null);
 
   const [disableButton, setDisableButton] = useState(true); // Initialize as disabled
   const [displayMessage, setDisplayMessage] = useState(false);
@@ -20,7 +26,8 @@ const NewPoll = (props) => {
       !candidateName1.current.value ||
       !candidateName2.current.value ||
       !candidateName1URL.current.value ||
-      !candidateName2URL.current.value
+      !candidateName2URL.current.value ||
+      !deadlineDate // Check if the deadline date is selected
     ) {
       setDisableButton(true); // Disable the button if any field is empty
     } else {
@@ -36,6 +43,7 @@ const NewPoll = (props) => {
       name2: candidateName2.current.value,
       url1: candidateName1URL.current.value,
       url2: candidateName2URL.current.value,
+      deadline: deadlineDate ? deadlineDate.toISOString() : null, // Convert the date to ISO format
     });
 
     await props.callMethod("addToPromptArray", {
@@ -56,8 +64,8 @@ const NewPoll = (props) => {
           <Col lg={8}>
             <p className="text-center">
               Create a new poll by filling out the form below. Enter a poll
-              prompt, the names and image URLs of two candidates, and click the
-              "Create Poll" button.
+              prompt, the names and image URLs of two candidates, select a
+              Election date, and click the "Create Poll" button.
             </p>
           </Col>
         </Row>
@@ -77,6 +85,18 @@ const NewPoll = (props) => {
                       placeholder="Enter Poll Prompt"
                       onChange={validateFields}
                     ></Form.Control>
+                  </Form.Group>
+
+                  <Form.Group className="mb-3 d-flex flex-column">
+                    <Form.Label>Election Day</Form.Label>
+                    <DatePicker
+                      selected={deadlineDate}
+                      onChange={(date) => setDeadlineDate(date)}
+                      minDate={new Date()} // Disable past dates
+                      showTimeSelect
+                      dateFormat="Pp"
+                      className="form-control"
+                    />
                   </Form.Group>
                 </Form>
               </Card.Body>
