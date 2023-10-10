@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Row, Col, Card, Image } from "react-bootstrap";
 import Footer from "../components/Footer";
-
+import aboutUsImage from "../assets/images/about-us.jpeg";
 import "../styles/AboutUs.css";
 
 const AboutUs = () => {
@@ -12,11 +12,7 @@ const AboutUs = () => {
           <h2 className="text-center mb-4">About B-VOTE</h2>
           <Row className="mb-4">
             <Col md={6}>
-              <Image
-                src="../assets/images/about-us.jpeg"
-                alt="About Us"
-                fluid
-              />
+              <Image src={aboutUsImage} alt="About Us" fluid rounded />
             </Col>
             <Col md={6}>
               <h3>Our Mission</h3>
@@ -28,7 +24,7 @@ const AboutUs = () => {
                 revolutionize the way elections are conducted, making the
                 process more accessible and trustworthy for all.
               </p>
-              <h3>Our Team</h3>
+              <h3 className="mt-5">Our Team</h3>
               <p>
                 Our team consists of dedicated individuals with expertise in
                 blockchain technology and elections. Together, we are working
