@@ -14,11 +14,11 @@ If you haven't installed dependencies during setup:
 
 Build and deploy your contract to TestNet with a temporary dev account:
 
-    npm run deploy
+    npm run build
 
-Test your contract:
+Start project on localhost:
 
-    npm test
+    npm start
 
 If you have a frontend, run `npm start`. This will run a dev server.
 
