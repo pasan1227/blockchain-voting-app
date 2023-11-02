@@ -19,6 +19,7 @@ import ContactUs from "./pages/ContactUs";
 import Polls from "./pages/Polls";
 import NewPoll from "./pages/NewPoll";
 import PollingStation from "./pages/PollingStation";
+import ErrorComponent from "./components/ErrorComponent";
 
 export default function App({ isSignedIn, contractId, wallet }) {
   const signInFunction = () => {
@@ -62,11 +63,12 @@ export default function App({ isSignedIn, contractId, wallet }) {
     if (isSignedIn) {
       return (
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/get-started" element={<GetStarted />} />
-          <Route path="/about-us" element={<AboutUs />} />
-          <Route path="/contact-us" element={<ContactUs />} />
+          <Route exact path="/" element={<Home />} />
+          <Route exact path="/get-started" element={<GetStarted />} />
+          <Route exact path="/about-us" element={<AboutUs />} />
+          <Route exact path="/contact-us" element={<ContactUs />} />
           <Route
+            exact
             path="/polls"
             element={
               <Polls
@@ -78,6 +80,7 @@ export default function App({ isSignedIn, contractId, wallet }) {
             }
           ></Route>
           <Route
+            exact
             path="/new-poll"
             element={
               <NewPoll
@@ -88,6 +91,7 @@ export default function App({ isSignedIn, contractId, wallet }) {
             }
           ></Route>
           <Route
+            exact
             path="/polling-station"
             element={
               <PollingStation
@@ -97,6 +101,7 @@ export default function App({ isSignedIn, contractId, wallet }) {
               />
             }
           ></Route>
+          <Route path="/*" element={<ErrorComponent />} />
         </Routes>
       );
     } else {
